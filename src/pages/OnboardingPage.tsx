@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 export function OnboardingPage() {
-  const { user, instructor } = useAuth()
+  const { user, instructor, refreshInstructor } = useAuth()
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState(
     instructor?.displayName || user?.displayName || ''
@@ -26,6 +26,7 @@ export function OnboardingPage() {
         onboardingComplete: true,
         updatedAt: serverTimestamp(),
       })
+      await refreshInstructor()
       navigate('/', { replace: true })
     } catch (err) {
       console.error('Failed to complete onboarding:', err)

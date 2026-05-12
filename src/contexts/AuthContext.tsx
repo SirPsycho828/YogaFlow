@@ -27,6 +27,7 @@ export interface AuthContextType {
   resendVerification: () => Promise<void>
   signOut: () => Promise<void>
   clearError: () => void
+  refreshInstructor: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
@@ -153,6 +154,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const clearError = () => setError(null)
 
+  const refreshInstructor = async () => {
+    if (!user) return
+    const snap = await getDoc(doc(db, 'instructors', user.uid))
+    if (snap.exists()) {
+      setInstructor({ ...snap.data(), uid: snap.id } as Instructor)
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -167,6 +176,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         resendVerification,
         signOut,
         clearError,
+        refreshInstructor,
       }}
     >
       {children}

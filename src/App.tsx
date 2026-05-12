@@ -10,6 +10,7 @@ import { OnboardingPage } from '@/pages/OnboardingPage'
 import { TodayPage } from '@/pages/TodayPage'
 import { CalendarPage } from '@/pages/CalendarPage'
 import { ClientsPage } from '@/pages/ClientsPage'
+import { ClientCreatePage } from '@/pages/ClientCreatePage'
 import { ClassesPage } from '@/pages/ClassesPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/" element={<TodayPage />} />
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/clients/new" element={<ClientCreatePage />} />
             <Route path="/classes" element={<ClassesPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>

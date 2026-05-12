@@ -14,6 +14,9 @@ import { ClientCreatePage } from '@/pages/ClientCreatePage'
 import { ClientDetailPage } from '@/pages/ClientDetailPage'
 import { ClientEditPage } from '@/pages/ClientEditPage'
 import { ClassesPage } from '@/pages/ClassesPage'
+import { ClassCreatePage } from '@/pages/ClassCreatePage'
+import { ClassDetailPage } from '@/pages/ClassDetailPage'
+import { GroupSessionPage } from '@/pages/GroupSessionPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { SessionCreatePage } from '@/pages/SessionCreatePage'
 import { SessionDetailPage } from '@/pages/SessionDetailPage'
@@ -52,6 +55,9 @@ export default function App() {
             <Route path="/sessions/:id" element={<SessionDetailPage />} />
             <Route path="/sessions/:id/edit" element={<SessionEditPage />} />
             <Route path="/classes" element={<ClassesPage />} />
+            <Route path="/classes/new" element={<ClassCreatePage />} />
+            <Route path="/classes/:id" element={<ClassDetailPage />} />
+            <Route path="/sessions/:id/attendance" element={<GroupSessionPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

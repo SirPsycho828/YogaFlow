@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /instructors/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /clients/{clientId} {
+      allow create: if request.auth != null
+        && request.resource.data.instructorId == request.auth.uid;
+      allow read, update, delete: if request.auth != null
+        && resource.data.instructorId == request.auth.uid;
+    }
+
+    match /sessions/{sessionId} {
+      allow create: if request.auth != null
+        && request.resource.data.instructorId == request.auth.uid;
+      allow read, update, delete: if request.auth != null
+        && resource.data.instructorId == request.auth.uid;
+    }
+
+    match /groupClasses/{classId} {
+      allow create: if request.auth != null
+        && request.resource.data.instructorId == request.auth.uid;
+      allow read, update, delete: if request.auth != null
+        && resource.data.instructorId == request.auth.uid;
+    }
+
+    match /attendance/{attendanceId} {
+      allow create: if request.auth != null
+        && request.resource.data.instructorId == request.auth.uid;
+      allow read, update, delete: if request.auth != null
+        && resource.data.instructorId == request.auth.uid;
+    }
+
+    match /series/{seriesId} {
+      allow create: if request.auth != null
+        && request.resource.data.instructorId == request.auth.uid;
+      allow read, update, delete: if request.auth != null
+        && resource.data.instructorId == request.auth.uid;
+    }
+
+    match /packages/{packageId} {
+      allow create: if request.auth != null
+        && request.resource.data.instructorId == request.auth.uid;
+      allow read, update, delete: if request.auth != null
+        && resource.data.instructorId == request.auth.uid;
+    }
+  }
+}

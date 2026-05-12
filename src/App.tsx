@@ -15,6 +15,7 @@ import { ClientDetailPage } from '@/pages/ClientDetailPage'
 import { ClientEditPage } from '@/pages/ClientEditPage'
 import { ClassesPage } from '@/pages/ClassesPage'
 import { SettingsPage } from '@/pages/SettingsPage'
+import { SessionCreatePage } from '@/pages/SessionCreatePage'
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="/clients/new" element={<ClientCreatePage />} />
             <Route path="/clients/:id" element={<ClientDetailPage />} />
             <Route path="/clients/:id/edit" element={<ClientEditPage />} />
+            <Route path="/sessions/new" element={<SessionCreatePage />} />
             <Route path="/classes" element={<ClassesPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>

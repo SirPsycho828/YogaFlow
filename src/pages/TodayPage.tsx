@@ -230,7 +230,7 @@ export function TodayPage() {
     <div className="py-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Today</h1>
+        <h1 className="text-xl font-semibold font-heading text-foreground">Today</h1>
         <div className="flex items-center gap-2">
           {!isOnline && (
             <WifiOff className="h-4 w-4 text-muted-foreground" aria-label="Offline" />
@@ -254,7 +254,7 @@ export function TodayPage() {
 
       {/* Date context line */}
       <div className="space-y-0.5">
-        <p className="text-sm font-medium text-foreground">{dateHeadingLabel}</p>
+        <p className="text-sm font-medium font-heading text-foreground">{dateHeadingLabel}</p>
         {!loading && totalActive > 0 && (
           <p className="text-xs text-muted-foreground">
             {totalActive} {totalActive === 1 ? 'session' : 'sessions'}
@@ -268,7 +268,7 @@ export function TodayPage() {
         <button
           type="button"
           onClick={() => setSelectedDate(new Date())}
-          className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+          className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs text-primary hover:text-primary hover:bg-primary/10 transition-colors"
         >
           <X className="h-3 w-3" />
           Back to Today
@@ -294,7 +294,7 @@ export function TodayPage() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="h-20 rounded-lg border border-border bg-card animate-pulse"
+              className="h-20 rounded-xl border border-border bg-card shadow-sm animate-pulse"
             />
           ))}
         </div>
@@ -305,13 +305,13 @@ export function TodayPage() {
         <>
           {viewingToday && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <CalendarOff className="h-12 w-12 text-muted-foreground" />
-              <h2 className="mt-4 text-lg font-medium">No sessions today</h2>
+              <CalendarOff className="h-12 w-12 text-primary/40" />
+              <h2 className="mt-4 text-lg font-heading font-medium">No sessions today</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 Enjoy your day off, or add a session.
               </p>
               <Button
-                className="mt-6"
+                className="mt-6 gradient-golden text-white border-0"
                 onClick={() => {
                   const fab = document.querySelector<HTMLButtonElement>('[aria-label="Add session"]')
                   fab?.click()
@@ -323,8 +323,8 @@ export function TodayPage() {
           )}
           {isFutureDate && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <CalendarIcon className="h-12 w-12 text-muted-foreground" />
-              <h2 className="mt-4 text-lg font-medium">Nothing scheduled</h2>
+              <CalendarIcon className="h-12 w-12 text-primary/40" />
+              <h2 className="mt-4 text-lg font-heading font-medium">Nothing scheduled</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 Tap + to add a session for this day.
               </p>
@@ -332,8 +332,8 @@ export function TodayPage() {
           )}
           {isPastDate && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <CalendarX className="h-12 w-12 text-muted-foreground" />
-              <h2 className="mt-4 text-lg font-medium">No sessions on this day.</h2>
+              <CalendarX className="h-12 w-12 text-primary/40" />
+              <h2 className="mt-4 text-lg font-heading font-medium">No sessions on this day.</h2>
             </div>
           )}
         </>

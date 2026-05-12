@@ -271,7 +271,7 @@ export function SessionEditPage() {
         </div>
 
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold text-foreground">Edit Session</h1>
+          <h1 className="text-2xl font-heading font-bold text-foreground">Edit Session</h1>
           {original.seriesId && (
             <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
               <Repeat className="h-3 w-3" />
@@ -283,7 +283,7 @@ export function SessionEditPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Client */}
           <div className="space-y-1.5">
-            <Label>
+            <Label className="text-xs font-medium tracking-wide text-muted-foreground">
               Client <span className="text-destructive">*</span>
             </Label>
             <ClientPicker value={clientId} onChange={handleClientChange} />
@@ -291,7 +291,7 @@ export function SessionEditPage() {
 
           {/* Date */}
           <div className="space-y-1.5">
-            <Label>
+            <Label className="text-xs font-medium tracking-wide text-muted-foreground">
               Date <span className="text-destructive">*</span>
             </Label>
             <DatePicker value={date} onChange={setDate} />
@@ -313,13 +313,14 @@ export function SessionEditPage() {
 
           {/* Location */}
           <div className="space-y-1.5">
-            <Label htmlFor="location">Location</Label>
+            <Label htmlFor="location" className="text-xs font-medium tracking-wide text-muted-foreground">Location</Label>
             <Input
               id="location"
               name="location"
               placeholder="Studio, online, client's home..."
               value={location}
               onChange={(e) => setLocation(e.target.value)}
+              className="h-12 rounded-lg border-input bg-card shadow-sm"
             />
           </div>
 
@@ -327,7 +328,7 @@ export function SessionEditPage() {
             <Button
               type="button"
               variant="outline"
-              className="flex-1"
+              className="flex-1 rounded-lg"
               onClick={() => navigate(`/sessions/${original.id}`)}
               disabled={submitting}
             >
@@ -335,7 +336,7 @@ export function SessionEditPage() {
             </Button>
             <Button
               type="submit"
-              className="flex-1"
+              className="flex-1 gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
               disabled={submitting || pendingSubmit}
             >
               {submitting ? 'Saving...' : 'Save Changes'}

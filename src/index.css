@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --radius-lg: 8px;
-  --radius-md: 6px;
+  --font-heading: 'Gilda Display', Georgia, serif;
+  --font-sans: 'Mulish', system-ui, sans-serif;
+  --radius-lg: 12px;
+  --radius-md: 8px;
   --radius-sm: 4px;
 
   /* Map semantic color tokens to Tailwind utilities */
@@ -26,36 +27,49 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
+
+  /* Shadows — warm espresso-tinted */
+  --shadow-sm: 0 1px 3px rgba(44, 31, 23, 0.06);
+  --shadow-md: 0 4px 12px rgba(44, 31, 23, 0.08);
+  --shadow-lg: 0 8px 24px rgba(44, 31, 23, 0.10);
+  --shadow-xl: 0 16px 48px rgba(44, 31, 23, 0.12);
 }
 
 @layer base {
   :root {
-    --background: 60 20% 97%;
-    --foreground: 30 8% 16%;
-    --card: 0 0% 100%;
-    --card-foreground: 30 8% 16%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 30 8% 16%;
-    --primary: 152 16% 43%;
+    /* Colors */
+    --background: 35 53% 97%;
+    --foreground: 23 33% 13%;
+    --card: 40 100% 99%;
+    --card-foreground: 23 33% 13%;
+    --popover: 40 100% 99%;
+    --popover-foreground: 23 33% 13%;
+    --primary: 15 43% 51%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 30 14% 93%;
-    --secondary-foreground: 30 6% 33%;
-    --muted: 30 14% 93%;
-    --muted-foreground: 30 5% 52%;
-    --accent: 28 45% 83%;
-    --accent-foreground: 30 6% 33%;
-    --destructive: 4 44% 54%;
+    --secondary: 30 30% 91%;
+    --secondary-foreground: 20 25% 28%;
+    --accent: 40 60% 59%;
+    --accent-foreground: 25 40% 14%;
+    --muted: 30 20% 91%;
+    --muted-foreground: 20 14% 47%;
+    --destructive: 0 54% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 30 14% 88%;
-    --input: 30 14% 88%;
-    --ring: 152 16% 43%;
-    --radius: 0.5rem;
+    --border: 30 25% 87%;
+    --input: 30 20% 83%;
+    --ring: 15 43% 51%;
+    --radius: 0.75rem;
 
-    --status-paid: 152 16% 43%;
-    --status-unpaid: 4 44% 54%;
-    --status-cancelled: 30 5% 52%;
-    --status-scheduled: 214 35% 60%;
-    --status-completed: 152 16% 43%;
+    /* Status tokens */
+    --status-paid: 152 35% 41%;
+    --status-unpaid: 0 54% 50%;
+    --status-cancelled: 20 14% 47%;
+    --status-scheduled: 210 30% 56%;
+    --status-completed: 152 35% 41%;
+
+    /* Animation */
+    --duration-fast: 150ms;
+    --duration-normal: 250ms;
+    --duration-slow: 400ms;
   }
 }
 
@@ -66,4 +80,99 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Signature gradient utility */
+@layer utilities {
+  .gradient-golden {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+  }
+  .gradient-golden-text {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Scroll-triggered reveal animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.reveal.visible {
+  animation: fadeInUp var(--duration-slow) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Stagger delays for children */
+.reveal-stagger > .reveal.visible:nth-child(1) { animation-delay: 0ms; }
+.reveal-stagger > .reveal.visible:nth-child(2) { animation-delay: 80ms; }
+.reveal-stagger > .reveal.visible:nth-child(3) { animation-delay: 160ms; }
+.reveal-stagger > .reveal.visible:nth-child(4) { animation-delay: 240ms; }
+.reveal-stagger > .reveal.visible:nth-child(5) { animation-delay: 320ms; }
+.reveal-stagger > .reveal.visible:nth-child(6) { animation-delay: 400ms; }
+
+/* Hero staggered entrance */
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-stagger > *:nth-child(1) { animation: heroReveal 600ms cubic-bezier(0.4, 0, 0.2, 1) 100ms forwards; opacity: 0; }
+.hero-stagger > *:nth-child(2) { animation: heroReveal 600ms cubic-bezier(0.4, 0, 0.2, 1) 250ms forwards; opacity: 0; }
+.hero-stagger > *:nth-child(3) { animation: heroReveal 600ms cubic-bezier(0.4, 0, 0.2, 1) 400ms forwards; opacity: 0; }
+.hero-stagger > *:nth-child(4) { animation: heroReveal 600ms cubic-bezier(0.4, 0, 0.2, 1) 550ms forwards; opacity: 0; }
+.hero-stagger > *:nth-child(5) { animation: heroReveal 600ms cubic-bezier(0.4, 0, 0.2, 1) 650ms forwards; opacity: 0; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .hero-stagger > * { opacity: 1 !important; }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus-visible styling */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Sonner toast overrides */
+[data-sonner-toast] {
+  --normal-bg: hsl(var(--card)) !important;
+  --normal-text: hsl(var(--foreground)) !important;
+  --normal-border: hsl(var(--border)) !important;
+  font-family: var(--font-sans) !important;
+  border-radius: var(--radius) !important;
 }

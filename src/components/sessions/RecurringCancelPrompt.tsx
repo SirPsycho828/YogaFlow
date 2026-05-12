@@ -52,7 +52,7 @@ export function RecurringCancelPrompt({ session, open, onClose }: RecurringCance
         `Session cancelled — ${count} future session${count !== 1 ? 's' : ''} removed`
       )
       onClose()
-      navigate('/')
+      navigate('/today')
     } else {
       toast.error('Failed to cancel recurring sessions. Please try again.')
     }

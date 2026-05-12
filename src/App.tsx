@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { ProtectedRoute, AuthOnlyRoute } from '@/components/layout/ProtectedRoute'
 import { setupForegroundMessages } from '@/lib/messaging'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { LandingPage } from '@/pages/LandingPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { SignUpPage } from '@/pages/SignUpPage'
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
@@ -25,6 +26,14 @@ import { SessionDetailPage } from '@/pages/SessionDetailPage'
 import { SessionEditPage } from '@/pages/SessionEditPage'
 import { UpdatePrompt } from '@/components/pwa/UpdatePrompt'
 import { IOSInstallBanner } from '@/components/pwa/IOSInstallBanner'
+import { useAuth } from '@/hooks/useAuth'
+
+function HomeRoute() {
+  const { user, loading } = useAuth()
+  if (loading) return null
+  if (user) return <Navigate to="/today" replace />
+  return <LandingPage />
+}
 
 export default function App() {
   useEffect(() => {
@@ -35,6 +44,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<HomeRoute />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -53,7 +63,7 @@ export default function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="/" element={<TodayPage />} />
+            <Route path="/today" element={<TodayPage />} />
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/clients" element={<ClientsPage />} />
             <Route path="/clients/new" element={<ClientCreatePage />} />

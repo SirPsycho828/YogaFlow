@@ -54,8 +54,8 @@ export function ClientsPage() {
     <div className="py-6 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Clients</h1>
-        <Button size="sm" onClick={() => navigate('/clients/new')}>
+        <h1 className="text-2xl font-bold font-heading text-foreground">Clients</h1>
+        <Button size="sm" className="gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg" onClick={() => navigate('/clients/new')}>
           <UserPlus className="h-4 w-4" />
           Add Client
         </Button>
@@ -69,7 +69,7 @@ export function ClientsPage() {
           placeholder="Search clients..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
+          className="pl-9 h-12 rounded-lg border-input bg-card shadow-sm"
         />
       </div>
 
@@ -79,7 +79,7 @@ export function ClientsPage() {
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="h-[68px] rounded-lg border border-border bg-card animate-pulse"
+              className="h-[68px] rounded-xl border border-border bg-card shadow-sm animate-pulse"
             />
           ))}
         </div>

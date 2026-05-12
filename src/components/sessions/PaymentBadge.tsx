@@ -10,9 +10,11 @@ export function PaymentBadge({ status, onToggle, className }: PaymentBadgeProps)
   const isPaid = status === 'paid'
 
   const baseClasses = cn(
-    'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-    isPaid ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600',
-    onToggle && 'cursor-pointer select-none',
+    'inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide uppercase',
+    isPaid
+      ? 'bg-[hsl(var(--status-paid))]/10 text-[hsl(var(--status-paid))]'
+      : 'bg-[hsl(var(--status-unpaid))]/10 text-[hsl(var(--status-unpaid))]',
+    onToggle && 'cursor-pointer select-none transition-opacity hover:opacity-80',
     className,
   )
 

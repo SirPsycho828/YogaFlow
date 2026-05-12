@@ -72,12 +72,12 @@ export function ClientCreatePage() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold text-foreground">New Client</h1>
+      <h1 className="text-2xl font-bold font-heading text-foreground">New Client</h1>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Name */}
         <div className="space-y-1.5">
-          <Label htmlFor="name">
+          <Label htmlFor="name" className="text-xs font-medium tracking-wide text-muted-foreground">
             Name <span className="text-destructive">*</span>
           </Label>
           <Input
@@ -88,12 +88,13 @@ export function ClientCreatePage() {
             onChange={handleChange}
             required
             autoFocus
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Phone */}
         <div className="space-y-1.5">
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone" className="text-xs font-medium tracking-wide text-muted-foreground">Phone</Label>
           <Input
             id="phone"
             name="phone"
@@ -101,12 +102,13 @@ export function ClientCreatePage() {
             placeholder="+1 555 000 0000"
             value={form.phone}
             onChange={handleChange}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Email */}
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-xs font-medium tracking-wide text-muted-foreground">Email</Label>
           <Input
             id="email"
             name="email"
@@ -114,12 +116,13 @@ export function ClientCreatePage() {
             placeholder="client@example.com"
             value={form.email}
             onChange={handleChange}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Health Notes */}
         <div className="space-y-1.5">
-          <Label htmlFor="healthNotes">Health Notes</Label>
+          <Label htmlFor="healthNotes" className="text-xs font-medium tracking-wide text-muted-foreground">Health Notes</Label>
           <Textarea
             id="healthNotes"
             name="healthNotes"
@@ -127,12 +130,13 @@ export function ClientCreatePage() {
             value={form.healthNotes}
             onChange={handleChange}
             rows={4}
+            className="rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         <Button
           type="submit"
-          className="w-full"
+          className="w-full gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
           disabled={submitting || !form.name.trim()}
         >
           {submitting ? 'Adding...' : 'Add Client'}

@@ -54,7 +54,7 @@ function ClassCard({ groupClass, onClick }: ClassCardProps) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full text-left rounded-lg border border-border bg-card p-4 space-y-2 hover:bg-secondary/50 active:bg-secondary transition-colors"
+      className="w-full text-left rounded-xl border border-border bg-card p-5 space-y-2 shadow-sm hover:shadow-md hover:border-primary/15 active:bg-secondary transition-all"
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-base font-semibold text-foreground">{groupClass.name}</h3>
@@ -110,8 +110,8 @@ export function ClassesPage() {
     return (
       <div className="py-6 space-y-4">
         <div className="h-8 w-32 rounded bg-secondary animate-pulse" />
-        <div className="h-24 rounded-lg border border-border bg-card animate-pulse" />
-        <div className="h-24 rounded-lg border border-border bg-card animate-pulse" />
+        <div className="h-24 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
+        <div className="h-24 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
       </div>
     )
   }
@@ -120,8 +120,8 @@ export function ClassesPage() {
     <div className="py-6 space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Classes</h1>
-        <Button size="sm" onClick={() => navigate('/classes/new')}>
+        <h1 className="text-2xl font-bold text-foreground font-heading">Classes</h1>
+        <Button size="sm" className="gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg" onClick={() => navigate('/classes/new')}>
           Create Class
         </Button>
       </div>

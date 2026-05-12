@@ -168,8 +168,8 @@ export function SessionDetailPage() {
         <div className="h-8 w-24 rounded bg-secondary animate-pulse" />
         <div className="h-7 w-48 rounded bg-secondary animate-pulse" />
         <div className="h-5 w-36 rounded bg-secondary animate-pulse" />
-        <div className="h-24 rounded-lg border border-border bg-card animate-pulse" />
-        <div className="h-16 rounded-lg border border-border bg-card animate-pulse" />
+        <div className="h-24 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
+        <div className="h-16 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
       </div>
     )
   }
@@ -223,7 +223,7 @@ export function SessionDetailPage() {
       {/* Title + recurring label */}
       <div className="space-y-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <h1 className="text-2xl font-bold text-foreground">{session.title}</h1>
+          <h1 className="text-2xl font-heading font-bold text-foreground">{session.title}</h1>
           {session.seriesId && (
             <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
               <Repeat className="h-3 w-3" />
@@ -270,8 +270,8 @@ export function SessionDetailPage() {
 
       {/* Health notes (private sessions only, if non-empty) */}
       {session.type === 'private' && client?.healthNotes && (
-        <section className="rounded-lg border border-accent bg-accent/30 p-4 space-y-1">
-          <h2 className="text-xs font-semibold text-accent-foreground uppercase tracking-wide">
+        <section className="rounded-xl border border-accent/30 bg-accent/10 p-4 space-y-1">
+          <h2 className="text-xs font-heading font-semibold text-accent-foreground uppercase tracking-wide">
             Health Notes
           </h2>
           <p className="text-sm text-foreground whitespace-pre-wrap">
@@ -282,9 +282,9 @@ export function SessionDetailPage() {
 
       {/* Session notes */}
       {session.notes ? (
-        <section className="rounded-lg border border-border bg-card p-4 space-y-2">
+        <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-2">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-foreground">Notes</h2>
+            <h2 className="text-sm font-heading font-semibold text-foreground">Notes</h2>
             <button
               type="button"
               onClick={() => setShowNotesSheet(true)}
@@ -296,11 +296,11 @@ export function SessionDetailPage() {
           <p className="text-sm text-foreground whitespace-pre-wrap">{session.notes}</p>
         </section>
       ) : session.status === 'completed' ? (
-        <section className="rounded-lg border border-border bg-card p-4">
+        <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
           <Button
             variant="outline"
             size="sm"
-            className="w-full"
+            className="w-full rounded-lg"
             onClick={() => setShowNotesSheet(true)}
           >
             Add Notes
@@ -313,7 +313,7 @@ export function SessionDetailPage() {
         {session.status === 'scheduled' && (
           <>
             <Button
-              className="w-full"
+              className="w-full gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
               onClick={handleMarkComplete}
               disabled={completing}
             >

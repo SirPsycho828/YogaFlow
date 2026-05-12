@@ -117,8 +117,8 @@ export function ClientDetailPage() {
       <div className="py-6 space-y-6">
         <div className="h-8 w-32 rounded bg-secondary animate-pulse" />
         <div className="h-10 w-48 rounded bg-secondary animate-pulse" />
-        <div className="h-24 rounded-lg border border-border bg-card animate-pulse" />
-        <div className="h-32 rounded-lg border border-border bg-card animate-pulse" />
+        <div className="h-24 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
+        <div className="h-32 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
       </div>
     )
   }
@@ -164,7 +164,7 @@ export function ClientDetailPage() {
       <div className="flex items-center gap-4">
         <InitialsAvatar name={client.name} className="h-14 w-14 text-lg" />
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{client.name}</h1>
+          <h1 className="text-2xl font-bold font-heading text-foreground">{client.name}</h1>
           {isArchived && (
             <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
               Archived
@@ -174,8 +174,8 @@ export function ClientDetailPage() {
       </div>
 
       {/* Contact section */}
-      <section className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h2 className="text-sm font-semibold text-foreground">Contact</h2>
+      <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-3">
+        <h2 className="text-sm font-semibold font-heading text-foreground">Contact</h2>
         {!client.phone && !client.email ? (
           <p className="text-sm text-muted-foreground">No contact info</p>
         ) : (
@@ -207,9 +207,9 @@ export function ClientDetailPage() {
       </section>
 
       {/* Health Notes section */}
-      <section className="rounded-lg border border-border bg-card p-4 space-y-2">
+      <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-foreground">Health Notes</h2>
+          <h2 className="text-sm font-semibold font-heading text-foreground">Health Notes</h2>
           <Link
             to={`/clients/${client.id}/edit`}
             className="text-xs text-muted-foreground underline-offset-4 hover:underline"
@@ -225,9 +225,9 @@ export function ClientDetailPage() {
       </section>
 
       {/* Payment summary */}
-      <section className="rounded-lg border border-border bg-card p-4 space-y-3">
+      <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-foreground">Payments</h2>
+          <h2 className="text-sm font-semibold font-heading text-foreground">Payments</h2>
           <Button
             size="sm"
             variant="outline"
@@ -250,8 +250,8 @@ export function ClientDetailPage() {
       />
 
       {/* Session history placeholder */}
-      <section className="rounded-lg border border-border bg-card p-4 space-y-2">
-        <h2 className="text-sm font-semibold text-foreground">Session History</h2>
+      <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-2">
+        <h2 className="text-sm font-semibold font-heading text-foreground">Session History</h2>
         <p className="text-sm text-muted-foreground">Session history coming soon</p>
       </section>
 

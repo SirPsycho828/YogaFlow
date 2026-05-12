@@ -7,13 +7,9 @@ import type { Session } from '@/types'
 interface SessionCardProps {
   session: Session
   showDate?: boolean
-  /** Extra info line rendered below the status badge (e.g. "Group (5/8)") */
   metaLine?: string
-  /** Show "Add Notes" hint for completed sessions with no notes */
   showAddNotes?: boolean
-  /** Called when user taps "Add Notes" on a completed session with no notes */
   onAddNotes?: (session: Session) => void
-  /** Called when user taps "Prep" on a scheduled session */
   onPrep?: (session: Session) => void
 }
 
@@ -34,7 +30,6 @@ export function SessionCard({
     day: 'numeric',
   })
 
-  // Group sessions link to the attendance page
   const linkTarget =
     session.type === 'group'
       ? `/sessions/${session.id}/attendance`
@@ -45,29 +40,29 @@ export function SessionCard({
   const showPrepButton = session.status === 'scheduled' && onPrep
 
   return (
-    <div className={cn('relative', isCancelled && 'opacity-60')}>
+    <div className={cn('relative', isCancelled && 'opacity-50')}>
       <Link
         to={linkTarget}
         className={cn(
-          'flex items-start gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-secondary/50 active:bg-secondary',
+          'flex items-start gap-3 rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-[var(--duration-fast)] hover:shadow-md hover:border-primary/15',
           (showAddNotesButton || showPrepButton) && 'pb-3',
         )}
       >
         {/* Left column: time */}
         <div className="shrink-0 w-[72px] text-right">
           {showDate && (
-            <p className="text-xs text-muted-foreground mb-0.5">{dateLabel}</p>
+            <p className="text-[11px] font-medium tracking-wide text-muted-foreground mb-0.5">{dateLabel}</p>
           )}
-          <p className="text-base font-semibold text-foreground leading-tight">
+          <p className="text-base font-semibold text-foreground leading-tight tabular-nums">
             {formatTime(session.startTime)}
           </p>
-          <p className="text-xs text-muted-foreground leading-tight">
+          <p className="text-xs text-muted-foreground leading-tight tabular-nums">
             {formatTime(session.endTime)}
           </p>
         </div>
 
-        {/* Divider */}
-        <div className="w-px self-stretch bg-border shrink-0" />
+        {/* Divider — gradient accent */}
+        <div className="w-0.5 self-stretch rounded-full shrink-0 gradient-golden opacity-40" />
 
         {/* Right column: details */}
         <div className="flex-1 min-w-0">
@@ -91,7 +86,6 @@ export function SessionCard({
             )}
           </div>
 
-          {/* Action row: Add Notes or Prep */}
           {(showAddNotesButton || showPrepButton) && (
             <div className="mt-2 flex items-center gap-2">
               {showAddNotesButton && (
@@ -115,7 +109,7 @@ export function SessionCard({
                     e.stopPropagation()
                     onPrep(session)
                   }}
-                  className="inline-flex items-center rounded border border-border bg-secondary/60 px-2 py-0.5 text-xs font-medium text-foreground hover:bg-secondary transition-colors"
+                  className="inline-flex items-center rounded-md border border-border bg-secondary/60 px-2.5 py-0.5 text-xs font-medium text-foreground hover:bg-secondary transition-colors"
                 >
                   Prep
                 </button>

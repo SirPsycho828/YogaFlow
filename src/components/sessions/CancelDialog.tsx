@@ -60,7 +60,7 @@ export function CancelDialog({ session, open, onClose }: CancelDialogProps) {
           : ''
       toast.success(`Session cancelled${creditsMsg}`)
       onClose()
-      navigate('/')
+      navigate('/today')
     } else {
       toast.error('Failed to cancel session. Please try again.')
     }

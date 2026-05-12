@@ -264,12 +264,12 @@ function DayDetail({ day, sessions, loading }: DayDetailProps) {
 
   return (
     <div className="mt-4 space-y-3">
-      <h2 className="text-sm font-semibold text-foreground">{label}</h2>
+      <h2 className="text-sm font-semibold text-foreground font-heading">{label}</h2>
 
       {loading && (
         <div className="space-y-2">
           {[0, 1].map((i) => (
-            <div key={i} className="h-16 rounded-lg border border-border bg-card animate-pulse" />
+            <div key={i} className="h-16 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
           ))}
         </div>
       )}
@@ -416,7 +416,7 @@ export function CalendarPage() {
     <div className="py-4 space-y-3 pb-24">
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Calendar</h1>
+        <h1 className="text-xl font-semibold text-foreground font-heading">Calendar</h1>
 
         {/* View mode toggle (segmented) */}
         <div className="flex rounded-lg bg-secondary p-0.5 text-sm">

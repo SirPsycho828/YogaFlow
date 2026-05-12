@@ -229,7 +229,7 @@ export function ClassDetailPage() {
       <div className="py-6 space-y-4">
         <div className="h-8 w-24 rounded bg-secondary animate-pulse" />
         <div className="h-7 w-48 rounded bg-secondary animate-pulse" />
-        <div className="h-24 rounded-lg border border-border bg-card animate-pulse" />
+        <div className="h-24 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
       </div>
     )
   }
@@ -279,11 +279,11 @@ export function ClassDetailPage() {
 
       {/* Class name */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">{groupClass.name}</h1>
+        <h1 className="text-2xl font-bold text-foreground font-heading">{groupClass.name}</h1>
       </div>
 
       {/* Info */}
-      <section className="rounded-lg border border-border bg-card p-4 space-y-2">
+      <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">Capacity</span>
           <span className="font-medium">
@@ -306,7 +306,7 @@ export function ClassDetailPage() {
 
       {/* Default Roster */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-foreground">Enrolled Students</h2>
+        <h2 className="text-sm font-semibold text-foreground font-heading">Enrolled Students</h2>
 
         {groupClass.defaultRoster.length === 0 ? (
           <p className="text-sm text-muted-foreground">No students enrolled yet.</p>
@@ -379,7 +379,7 @@ export function ClassDetailPage() {
                 Add Student
               </button>
             ) : (
-              <div className="rounded-lg border border-border bg-card overflow-hidden">
+              <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
                 <div className="flex items-center gap-2 px-3 border-b border-border">
                   <Search className="h-4 w-4 text-muted-foreground shrink-0" />
                   <input
@@ -388,7 +388,7 @@ export function ClassDetailPage() {
                     placeholder="Search clients..."
                     value={addSearch}
                     onChange={(e) => setAddSearch(e.target.value)}
-                    className="h-9 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                    className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   />
                   <button
                     type="button"
@@ -440,7 +440,7 @@ export function ClassDetailPage() {
 
       {/* Upcoming Sessions */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-foreground">Upcoming Sessions</h2>
+        <h2 className="text-sm font-semibold text-foreground font-heading">Upcoming Sessions</h2>
         {upcomingSessions.length === 0 ? (
           <p className="text-sm text-muted-foreground">No upcoming sessions.</p>
         ) : (

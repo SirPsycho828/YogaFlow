@@ -40,10 +40,10 @@ export function SettingsPage() {
 
   return (
     <div className="py-6 space-y-6">
-      <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+      <h1 className="text-2xl font-bold font-heading text-foreground">Settings</h1>
 
       {/* Profile Section */}
-      <Card className="p-4">
+      <Card className="p-4 rounded-xl shadow-sm">
         <div className="flex items-center gap-4">
           <InitialsAvatar
             name={instructor?.displayName || user?.displayName || user?.email || '?'}
@@ -62,8 +62,8 @@ export function SettingsPage() {
 
       {/* Notifications Section */}
       {isNotificationSupported() && (
-        <Card className="p-4 space-y-3">
-          <h2 className="text-base font-semibold text-foreground">Notifications</h2>
+        <Card className="p-4 space-y-3 rounded-xl shadow-sm">
+          <h2 className="text-base font-semibold font-heading text-foreground">Notifications</h2>
           <Separator />
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
@@ -93,7 +93,7 @@ export function SettingsPage() {
       <div>
         <Button
           variant="outline"
-          className="w-full h-11 text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
+          className="w-full h-11 rounded-lg text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
           onClick={signOut}
         >
           Sign Out

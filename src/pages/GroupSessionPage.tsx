@@ -189,8 +189,8 @@ export function GroupSessionPage() {
         <div className="h-8 w-24 rounded bg-secondary animate-pulse" />
         <div className="h-7 w-48 rounded bg-secondary animate-pulse" />
         <div className="h-5 w-36 rounded bg-secondary animate-pulse" />
-        <div className="h-16 rounded-lg border border-border bg-card animate-pulse" />
-        <div className="h-16 rounded-lg border border-border bg-card animate-pulse" />
+        <div className="h-16 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
+        <div className="h-16 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
       </div>
     )
   }
@@ -246,13 +246,13 @@ export function GroupSessionPage() {
 
       {/* Title */}
       <div className="space-y-0.5">
-        <h1 className="text-2xl font-bold text-foreground">{session.title}</h1>
+        <h1 className="text-2xl font-bold text-foreground font-heading">{session.title}</h1>
         <p className="text-sm font-medium text-foreground">{fullDate}</p>
         <p className="text-sm text-muted-foreground">{timeRange}</p>
       </div>
 
       {/* Summary bar */}
-      <div className="rounded-lg border border-border bg-card px-4 py-3 flex items-center gap-4 text-sm">
+      <div className="rounded-xl border border-border bg-card px-4 py-3 flex items-center gap-4 text-sm shadow-sm">
         <span className="font-medium text-foreground">
           {attendedCount}/{attendanceList.length} attended
         </span>
@@ -264,7 +264,7 @@ export function GroupSessionPage() {
 
       {/* Attendance list */}
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold text-foreground">Attendance</h2>
+        <h2 className="text-sm font-semibold text-foreground font-heading">Attendance</h2>
 
         {attendanceList.length === 0 ? (
           <p className="text-sm text-muted-foreground">No students enrolled in this session.</p>
@@ -352,7 +352,7 @@ export function GroupSessionPage() {
                 Add Drop-in
               </button>
             ) : (
-              <div className="rounded-lg border border-border bg-card overflow-hidden">
+              <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
                 <div className="flex items-center gap-2 px-3 border-b border-border">
                   <Search className="h-4 w-4 text-muted-foreground shrink-0" />
                   <input
@@ -361,7 +361,7 @@ export function GroupSessionPage() {
                     placeholder="Search clients..."
                     value={dropInSearch}
                     onChange={(e) => setDropInSearch(e.target.value)}
-                    className="h-9 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                    className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                   />
                   <button
                     type="button"
@@ -413,7 +413,7 @@ export function GroupSessionPage() {
       {session.status === 'scheduled' && (
         <div className="pt-2">
           <Button
-            className="w-full"
+            className="w-full gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
             onClick={handleMarkComplete}
             disabled={completing}
           >

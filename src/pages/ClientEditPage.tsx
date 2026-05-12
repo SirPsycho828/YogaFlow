@@ -149,12 +149,12 @@ export function ClientEditPage() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold text-foreground">Edit Client</h1>
+      <h1 className="text-2xl font-bold font-heading text-foreground">Edit Client</h1>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Name */}
         <div className="space-y-1.5">
-          <Label htmlFor="name">
+          <Label htmlFor="name" className="text-xs font-medium tracking-wide text-muted-foreground">
             Name <span className="text-destructive">*</span>
           </Label>
           <Input
@@ -165,12 +165,13 @@ export function ClientEditPage() {
             onChange={handleChange}
             required
             autoFocus
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Phone */}
         <div className="space-y-1.5">
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone" className="text-xs font-medium tracking-wide text-muted-foreground">Phone</Label>
           <Input
             id="phone"
             name="phone"
@@ -178,12 +179,13 @@ export function ClientEditPage() {
             placeholder="+1 555 000 0000"
             value={form.phone}
             onChange={handleChange}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Email */}
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-xs font-medium tracking-wide text-muted-foreground">Email</Label>
           <Input
             id="email"
             name="email"
@@ -191,12 +193,13 @@ export function ClientEditPage() {
             placeholder="client@example.com"
             value={form.email}
             onChange={handleChange}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Health Notes */}
         <div className="space-y-1.5">
-          <Label htmlFor="healthNotes">Health Notes</Label>
+          <Label htmlFor="healthNotes" className="text-xs font-medium tracking-wide text-muted-foreground">Health Notes</Label>
           <Textarea
             id="healthNotes"
             name="healthNotes"
@@ -204,6 +207,7 @@ export function ClientEditPage() {
             value={form.healthNotes}
             onChange={handleChange}
             rows={4}
+            className="rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
@@ -211,7 +215,7 @@ export function ClientEditPage() {
           <Button
             type="button"
             variant="outline"
-            className="flex-1"
+            className="flex-1 rounded-lg"
             onClick={() => navigate(`/clients/${original.id}`)}
             disabled={submitting}
           >
@@ -219,7 +223,7 @@ export function ClientEditPage() {
           </Button>
           <Button
             type="submit"
-            className="flex-1"
+            className="flex-1 gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
             disabled={submitting || !form.name.trim()}
           >
             {submitting ? 'Saving...' : 'Save Changes'}

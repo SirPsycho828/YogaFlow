@@ -116,7 +116,7 @@ export function SessionCreatePage() {
         })
         const data = result.data as { sessionsCreated: number }
         toast.success(`Recurring sessions created (${data.sessionsCreated} sessions)`)
-        navigate('/')
+        navigate('/today')
       } else {
         // Single session creation
         const sessionDate = new Date(date!)
@@ -143,7 +143,7 @@ export function SessionCreatePage() {
         })
 
         toast.success('Session created')
-        navigate('/')
+        navigate('/today')
       }
     } catch (err) {
       console.error('Failed to create session:', err)
@@ -166,12 +166,12 @@ export function SessionCreatePage() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold text-foreground">New Session</h1>
+      <h1 className="text-2xl font-heading font-bold text-foreground">New Session</h1>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Client */}
         <div className="space-y-1.5">
-          <Label>
+          <Label className="text-xs font-medium tracking-wide text-muted-foreground">
             Client <span className="text-destructive">*</span>
           </Label>
           <ClientPicker value={clientId} onChange={handleClientChange} />
@@ -179,7 +179,7 @@ export function SessionCreatePage() {
 
         {/* Date */}
         <div className="space-y-1.5">
-          <Label>
+          <Label className="text-xs font-medium tracking-wide text-muted-foreground">
             Date <span className="text-destructive">*</span>
           </Label>
           <DatePicker value={date} onChange={setDate} />
@@ -201,20 +201,21 @@ export function SessionCreatePage() {
 
         {/* Location */}
         <div className="space-y-1.5">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location" className="text-xs font-medium tracking-wide text-muted-foreground">Location</Label>
           <Input
             id="location"
             name="location"
             placeholder="Studio, online, client's home..."
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Repeat toggle */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label htmlFor="repeat-toggle" className="cursor-pointer">
+            <Label htmlFor="repeat-toggle" className="cursor-pointer text-xs font-medium tracking-wide text-muted-foreground">
               Repeat
             </Label>
             {/* Native checkbox styled as a switch */}
@@ -240,13 +241,13 @@ export function SessionCreatePage() {
             <div className="space-y-3 pl-1">
               {/* Frequency */}
               <div className="space-y-1.5">
-                <Label>Frequency</Label>
+                <Label className="text-xs font-medium tracking-wide text-muted-foreground">Frequency</Label>
                 <select
                   value={frequency}
                   onChange={(e) =>
                     setFrequency(e.target.value as typeof frequency)
                   }
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs focus:outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  className="flex h-12 w-full rounded-lg border border-input bg-card px-3 py-1 text-sm shadow-sm focus:outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                 >
                   <option value="weekly">Every week</option>
                   <option value="biweekly">Every 2 weeks</option>
@@ -256,7 +257,7 @@ export function SessionCreatePage() {
 
               {/* End condition */}
               <div className="space-y-1.5">
-                <Label>Ends</Label>
+                <Label className="text-xs font-medium tracking-wide text-muted-foreground">Ends</Label>
                 <div className="flex flex-col gap-2">
                   <label className="flex items-center gap-2 text-sm cursor-pointer">
                     <input
@@ -292,7 +293,7 @@ export function SessionCreatePage() {
 
         <Button
           type="submit"
-          className="w-full"
+          className="w-full gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
           disabled={submitting}
         >
           {submitting ? 'Creating...' : 'Create Session'}

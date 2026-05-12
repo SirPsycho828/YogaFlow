@@ -13,13 +13,14 @@ export default defineConfig({
       manifest: {
         name: 'YogaFlow',
         short_name: 'YogaFlow',
-        description: 'Organize your yoga clients and classes',
+        description: 'Manage your yoga clients, sessions, and payments',
         start_url: '/',
         display: 'standalone',
         orientation: 'portrait',
-        theme_color: '#5B7F6E',
-        background_color: '#FAFAF7',
+        theme_color: '#B8664E',
+        background_color: '#FBF7F2',
         icons: [
+          { src: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
           { src: '/icons/icon-192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },

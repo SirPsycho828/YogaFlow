@@ -12,7 +12,7 @@ export function InitialsAvatar({ name, className }: InitialsAvatarProps) {
     : parts[0]?.[0] || '?'
 
   return (
-    <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-medium text-secondary-foreground', className)}>
+    <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full gradient-golden text-sm font-semibold text-white', className)}>
       {initials.toUpperCase()}
     </div>
   )

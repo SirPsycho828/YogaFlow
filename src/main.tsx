@@ -10,6 +10,22 @@ Sentry.init({
   tracesSampleRate: 0.1,
 })
 
+// Console branding
+if (typeof window !== 'undefined') {
+  console.log(
+    '%c' + [
+      '╦ ╦╔═╗╔═╗╔═╗',
+      '╚╦╝║ ║║ ╦╠═╣',
+      ' ╩ ╚═╝╚═╝╩ ╩  flow',
+    ].join('\n'),
+    'color: #B8664E; font-family: monospace; font-size: 14px; font-weight: bold;'
+  )
+  console.log(
+    '%cBreathe in. Schedule out.',
+    'color: #D4A95A; font-size: 12px; font-style: italic;'
+  )
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

@@ -225,12 +225,12 @@ export function ClassCreatePage() {
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold text-foreground">New Class</h1>
+      <h1 className="text-2xl font-bold text-foreground font-heading">New Class</h1>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Class Name */}
         <div className="space-y-1.5">
-          <Label htmlFor="class-name">
+          <Label htmlFor="class-name" className="text-xs font-medium tracking-wide text-muted-foreground">
             Class Name <span className="text-destructive">*</span>
           </Label>
           <Input
@@ -238,12 +238,13 @@ export function ClassCreatePage() {
             placeholder="e.g. Morning Vinyasa"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Max Capacity */}
         <div className="space-y-1.5">
-          <Label htmlFor="max-capacity">
+          <Label htmlFor="max-capacity" className="text-xs font-medium tracking-wide text-muted-foreground">
             Max Capacity <span className="text-destructive">*</span>
           </Label>
           <Input
@@ -255,17 +256,19 @@ export function ClassCreatePage() {
               const val = parseInt(e.target.value, 10)
               setMaxCapacity(isNaN(val) ? 2 : val)
             }}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
         {/* Location */}
         <div className="space-y-1.5">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location" className="text-xs font-medium tracking-wide text-muted-foreground">Location</Label>
           <Input
             id="location"
             placeholder="Studio, online..."
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            className="h-12 rounded-lg border-input bg-card shadow-sm"
           />
         </div>
 
@@ -279,19 +282,19 @@ export function ClassCreatePage() {
           </div>
 
           {/* Search */}
-          <div className="flex items-center gap-2 rounded-md border border-input bg-background px-3">
+          <div className="flex items-center gap-2 rounded-lg border border-input bg-card px-3 shadow-sm">
             <Search className="h-4 w-4 text-muted-foreground shrink-0" />
             <input
               type="text"
               placeholder="Search clients..."
               value={rosterSearch}
               onChange={(e) => setRosterSearch(e.target.value)}
-              className="h-9 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>
 
           {/* Client list */}
-          <div className="rounded-md border border-input bg-background max-h-52 overflow-y-auto divide-y divide-border">
+          <div className="rounded-xl border border-border bg-card max-h-52 overflow-y-auto divide-y divide-border shadow-sm">
             {clientsLoading ? (
               <div className="px-3 py-4 text-sm text-muted-foreground text-center">
                 Loading clients...
@@ -342,7 +345,7 @@ export function ClassCreatePage() {
 
         {/* Divider */}
         <div className="border-t border-border pt-2">
-          <p className="text-sm font-medium text-foreground mb-4">First Session</p>
+          <p className="text-sm font-medium text-foreground mb-4 font-heading">First Session</p>
 
           {/* Date */}
           <div className="space-y-1.5 mb-4">
@@ -401,7 +404,7 @@ export function ClassCreatePage() {
                   onChange={(e) =>
                     setFrequency(e.target.value as typeof frequency)
                   }
-                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs focus:outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  className="flex h-12 w-full rounded-lg border border-input bg-card px-3 py-1 text-sm shadow-sm focus:outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                 >
                   <option value="weekly">Every week</option>
                   <option value="biweekly">Every 2 weeks</option>
@@ -445,7 +448,7 @@ export function ClassCreatePage() {
           )}
         </div>
 
-        <Button type="submit" className="w-full" disabled={submitting}>
+        <Button type="submit" className="w-full gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg" disabled={submitting}>
           {submitting ? 'Creating...' : 'Create Class'}
         </Button>
       </form>

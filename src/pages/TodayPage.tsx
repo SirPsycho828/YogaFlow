@@ -15,12 +15,16 @@ import {
   CalendarX,
   X,
 } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 import { db } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 import { SessionCard } from '@/components/sessions/SessionCard'
 import { NowDivider } from '@/components/today/NowDivider'
 import { FAB } from '@/components/today/FAB'
+import { NotesSheet } from '@/components/sessions/NotesSheet'
+import { PrepSheet } from '@/components/sessions/PrepSheet'
+import { GroupPrepSheet } from '@/components/sessions/GroupPrepSheet'
 import { Button } from '@/components/ui/button'
 import {
   Popover,
@@ -45,6 +49,7 @@ function currentHHmm(): string {
 export function TodayPage() {
   const { user } = useAuth()
   const isOnline = useOnlineStatus()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [calendarOpen, setCalendarOpen] = useState(false)
@@ -55,6 +60,10 @@ export function TodayPage() {
   // Maps for group session extra data
   const [attendanceCounts, setAttendanceCounts] = useState<Map<string, number>>(new Map())
   const [groupClasses, setGroupClasses] = useState<Map<string, GroupClass>>(new Map())
+
+  // Sheet state
+  const [notesSession, setNotesSession] = useState<Session | null>(null)
+  const [prepSession, setPrepSession] = useState<Session | null>(null)
 
   // Subscribe to sessions for selected date
   useEffect(() => {
@@ -140,6 +149,20 @@ export function TodayPage() {
     })
   }, [sessions]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Deep-link: ?action=addNotes&sessionId=X → open NotesSheet on mount
+  useEffect(() => {
+    const action = searchParams.get('action')
+    const sessionId = searchParams.get('sessionId')
+    if (action === 'addNotes' && sessionId && sessions.length > 0) {
+      const target = sessions.find((s) => s.id === sessionId)
+      if (target) {
+        setNotesSession(target)
+        // Clear the params so re-render doesn't re-trigger
+        setSearchParams({}, { replace: true })
+      }
+    }
+  }, [searchParams, sessions]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Derived values
   const viewingToday = isToday(selectedDate)
   const todayMidnight = startOfDay(new Date())
@@ -181,6 +204,14 @@ export function TodayPage() {
       setSelectedDate(date)
       setCalendarOpen(false)
     }
+  }
+
+  function handleAddNotes(session: Session) {
+    setNotesSession(session)
+  }
+
+  function handlePrep(session: Session) {
+    setPrepSession(session)
   }
 
   function buildMetaLine(session: Session): string | undefined {
@@ -320,6 +351,8 @@ export function TodayPage() {
                 session={session}
                 metaLine={buildMetaLine(session)}
                 showAddNotes={session.status === 'completed' && !session.notes}
+                onAddNotes={handleAddNotes}
+                onPrep={handlePrep}
               />
               {/* Divider after the last past session (not after the final session) */}
               {viewingToday &&
@@ -332,6 +365,31 @@ export function TodayPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Notes sheet */}
+      {notesSession && (
+        <NotesSheet
+          session={notesSession}
+          open={!!notesSession}
+          onClose={() => setNotesSession(null)}
+        />
+      )}
+
+      {/* Prep sheets */}
+      {prepSession && prepSession.type === 'private' && (
+        <PrepSheet
+          session={prepSession}
+          open={!!prepSession}
+          onClose={() => setPrepSession(null)}
+        />
+      )}
+      {prepSession && prepSession.type === 'group' && (
+        <GroupPrepSheet
+          session={prepSession}
+          open={!!prepSession}
+          onClose={() => setPrepSession(null)}
+        />
       )}
 
       {/* FAB — always visible */}

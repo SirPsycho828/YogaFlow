@@ -13,6 +13,7 @@ import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { PaymentBadge } from '@/components/sessions/PaymentBadge'
 import { CancelDialog } from '@/components/sessions/CancelDialog'
 import { RecurringCancelPrompt } from '@/components/sessions/RecurringCancelPrompt'
+import { NotesSheet } from '@/components/sessions/NotesSheet'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,6 +44,7 @@ export function SessionDetailPage() {
   const [showRecurringPrompt, setShowRecurringPrompt] = useState(false)
   const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false)
   const [showMarkUnpaidDialog, setShowMarkUnpaidDialog] = useState(false)
+  const [showNotesSheet, setShowNotesSheet] = useState(false)
 
   const {
     call: callMarkComplete,
@@ -278,15 +280,26 @@ export function SessionDetailPage() {
       {/* Session notes */}
       {session.notes ? (
         <section className="rounded-lg border border-border bg-card p-4 space-y-2">
-          <h2 className="text-sm font-semibold text-foreground">Notes</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-foreground">Notes</h2>
+            <button
+              type="button"
+              onClick={() => setShowNotesSheet(true)}
+              className="text-xs text-primary hover:text-primary/80 transition-colors"
+            >
+              Edit
+            </button>
+          </div>
           <p className="text-sm text-foreground whitespace-pre-wrap">{session.notes}</p>
         </section>
       ) : session.status === 'completed' ? (
         <section className="rounded-lg border border-border bg-card p-4">
-          <Button variant="outline" size="sm" className="w-full" onClick={() => {
-            // NotesSheet comes in Task 20
-            toast.info('Notes editing coming soon')
-          }}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => setShowNotesSheet(true)}
+          >
             Add Notes
           </Button>
         </section>
@@ -332,6 +345,15 @@ export function SessionDetailPage() {
           </p>
         )}
       </div>
+
+      {/* Notes sheet */}
+      {session.status === 'completed' && (
+        <NotesSheet
+          session={session}
+          open={showNotesSheet}
+          onClose={() => setShowNotesSheet(false)}
+        />
+      )}
 
       {/* Cancel dialogs */}
       {session.seriesId ? (

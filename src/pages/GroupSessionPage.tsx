@@ -23,6 +23,7 @@ import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
 import { PaymentBadge } from '@/components/sessions/PaymentBadge'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { formatTime } from '@/lib/utils'
+import { NotificationPrompt } from '@/components/notifications/NotificationPrompt'
 import type { Session, Attendance, Client, GroupClass } from '@/types'
 
 interface MarkSessionCompleteInput { sessionId: string }
@@ -44,6 +45,8 @@ export function GroupSessionPage() {
     call: callMarkComplete,
     loading: completing,
   } = useCallable<MarkSessionCompleteInput, MarkSessionCompleteOutput>('markSessionComplete')
+
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false)
 
   // Drop-in picker
   const [showDropIn, setShowDropIn] = useState(false)
@@ -151,6 +154,7 @@ export function GroupSessionPage() {
           ? ` — ${result.paymentsProcessed} credit${result.paymentsProcessed !== 1 ? 's' : ''} used`
           : ''
       toast.success(`Session completed${creditsMsg}`)
+      setShowNotificationPrompt(true)
     } else {
       toast.error('Failed to update session. Please try again.')
     }
@@ -417,6 +421,9 @@ export function GroupSessionPage() {
           </Button>
         </div>
       )}
+
+      {/* Notification opt-in prompt shown after first completion */}
+      {showNotificationPrompt && <NotificationPrompt />}
     </div>
   )
 }

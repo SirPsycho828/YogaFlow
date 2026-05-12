@@ -12,3 +12,6 @@ export { deleteClient } from './deleteClient'
 
 // Firestore triggers
 export { onSessionPaymentUpdate, onAttendancePaymentUpdate, onSessionCreate } from './triggers'
+
+// Scheduled functions
+export { sendNoteReminders } from './sendNoteReminders'

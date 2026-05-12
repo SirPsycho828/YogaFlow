@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
+import { setupForegroundMessages } from '@/lib/messaging'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { LoginPage } from '@/pages/LoginPage'
 import { SignUpPage } from '@/pages/SignUpPage'
@@ -23,6 +25,10 @@ import { SessionDetailPage } from '@/pages/SessionDetailPage'
 import { SessionEditPage } from '@/pages/SessionEditPage'
 
 export default function App() {
+  useEffect(() => {
+    setupForegroundMessages()
+  }, [])
+
   return (
     <BrowserRouter>
       <AuthProvider>

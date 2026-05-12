@@ -25,6 +25,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { formatTime } from '@/lib/utils'
+import { NotificationPrompt } from '@/components/notifications/NotificationPrompt'
 import type { Session, Client, Package } from '@/types'
 
 interface MarkSessionCompleteInput { sessionId: string }
@@ -45,6 +46,7 @@ export function SessionDetailPage() {
   const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false)
   const [showMarkUnpaidDialog, setShowMarkUnpaidDialog] = useState(false)
   const [showNotesSheet, setShowNotesSheet] = useState(false)
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false)
 
   const {
     call: callMarkComplete,
@@ -112,6 +114,7 @@ export function SessionDetailPage() {
           ? ` — 1 credit used${activePackage ? ` (${activePackage.remainingCredits - 1} remaining)` : ''}`
           : ''
       toast.success(`Session completed${creditsMsg}`)
+      setShowNotificationPrompt(true)
     } else {
       toast.error('Failed to update session. Please try again.')
     }
@@ -412,6 +415,9 @@ export function SessionDetailPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Notification opt-in prompt shown after first completion */}
+      {showNotificationPrompt && <NotificationPrompt />}
     </div>
   )
 }

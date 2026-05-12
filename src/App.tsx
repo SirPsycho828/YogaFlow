@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
-import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
+import { ProtectedRoute, AuthOnlyRoute } from '@/components/layout/ProtectedRoute'
 import { setupForegroundMessages } from '@/lib/messaging'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { LoginPage } from '@/pages/LoginPage'
@@ -41,9 +41,9 @@ export default function App() {
           <Route
             path="/onboarding"
             element={
-              <ProtectedRoute>
+              <AuthOnlyRoute>
                 <OnboardingPage />
-              </ProtectedRoute>
+              </AuthOnlyRoute>
             }
           />
           <Route

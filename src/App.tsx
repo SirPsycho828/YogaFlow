@@ -23,6 +23,8 @@ import { SettingsPage } from '@/pages/SettingsPage'
 import { SessionCreatePage } from '@/pages/SessionCreatePage'
 import { SessionDetailPage } from '@/pages/SessionDetailPage'
 import { SessionEditPage } from '@/pages/SessionEditPage'
+import { UpdatePrompt } from '@/components/pwa/UpdatePrompt'
+import { IOSInstallBanner } from '@/components/pwa/IOSInstallBanner'
 
 export default function App() {
   useEffect(() => {
@@ -69,6 +71,8 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Toaster position="bottom-center" />
+        <UpdatePrompt />
+        <IOSInstallBanner />
       </AuthProvider>
     </BrowserRouter>
   )

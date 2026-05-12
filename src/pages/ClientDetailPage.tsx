@@ -4,12 +4,12 @@ import {
   doc,
   onSnapshot,
   updateDoc,
-  deleteDoc,
   serverTimestamp,
 } from 'firebase/firestore'
 import { toast } from 'sonner'
 import { db } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
+import { useCallable } from '@/hooks/useCallable'
 import { Button } from '@/components/ui/button'
 import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
 import {
@@ -23,7 +23,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { PaymentSummary } from '@/components/payments/PaymentSummary'
+import { PackageCreateSheet } from '@/components/payments/PackageCreateSheet'
 import type { Client } from '@/types'
+
+interface DeleteClientInput { clientId: string }
+interface DeleteClientOutput { success: boolean }
 
 export function ClientDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -34,7 +39,9 @@ export function ClientDetailPage() {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [archiving, setArchiving] = useState(false)
-  const [deleting, setDeleting] = useState(false)
+  const [showPackageSheet, setShowPackageSheet] = useState(false)
+
+  const { call: callDeleteClient, loading: deleting } = useCallable<DeleteClientInput, DeleteClientOutput>('deleteClient')
 
   useEffect(() => {
     if (!id || !user) return
@@ -96,15 +103,12 @@ export function ClientDetailPage() {
 
   async function handleDelete() {
     if (!client) return
-    setDeleting(true)
-    try {
-      await deleteDoc(doc(db, 'clients', client.id))
+    const result = await callDeleteClient({ clientId: client.id })
+    if (result?.success) {
       toast.success(`${client.name} deleted`)
       navigate('/clients')
-    } catch (err) {
-      console.error('Failed to delete client:', err)
+    } else {
       toast.error('Failed to delete client. Please try again.')
-      setDeleting(false)
     }
   }
 
@@ -220,11 +224,30 @@ export function ClientDetailPage() {
         )}
       </section>
 
-      {/* Payment summary placeholder */}
-      <section className="rounded-lg border border-border bg-card p-4 space-y-2">
-        <h2 className="text-sm font-semibold text-foreground">Payments</h2>
-        <p className="text-sm text-muted-foreground">Payment tracking coming soon</p>
+      {/* Payment summary */}
+      <section className="rounded-lg border border-border bg-card p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-foreground">Payments</h2>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setShowPackageSheet(true)}
+          >
+            Create Package
+          </Button>
+        </div>
+        <PaymentSummary
+          clientId={client.id}
+          unpaidCount={client.unpaidCount ?? 0}
+          onCreatePackage={() => setShowPackageSheet(true)}
+        />
       </section>
+
+      <PackageCreateSheet
+        clientId={client.id}
+        open={showPackageSheet}
+        onClose={() => setShowPackageSheet(false)}
+      />
 
       {/* Session history placeholder */}
       <section className="rounded-lg border border-border bg-card p-4 space-y-2">

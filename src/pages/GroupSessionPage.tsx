@@ -17,12 +17,16 @@ import { Search, UserPlus } from 'lucide-react'
 import { format } from 'date-fns'
 import { db } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
+import { useCallable } from '@/hooks/useCallable'
 import { Button } from '@/components/ui/button'
 import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
 import { PaymentBadge } from '@/components/sessions/PaymentBadge'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { formatTime } from '@/lib/utils'
 import type { Session, Attendance, Client, GroupClass } from '@/types'
+
+interface MarkSessionCompleteInput { sessionId: string }
+interface MarkSessionCompleteOutput { status: string; paymentsProcessed: number }
 
 export function GroupSessionPage() {
   const { id } = useParams<{ id: string }>()
@@ -35,7 +39,11 @@ export function GroupSessionPage() {
   const [clientsMap, setClientsMap] = useState<Map<string, Client>>(new Map())
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
-  const [completing, setCompleting] = useState(false)
+
+  const {
+    call: callMarkComplete,
+    loading: completing,
+  } = useCallable<MarkSessionCompleteInput, MarkSessionCompleteOutput>('markSessionComplete')
 
   // Drop-in picker
   const [showDropIn, setShowDropIn] = useState(false)
@@ -136,18 +144,15 @@ export function GroupSessionPage() {
 
   async function handleMarkComplete() {
     if (!session) return
-    setCompleting(true)
-    try {
-      await updateDoc(doc(db, 'sessions', session.id), {
-        status: 'completed',
-        updatedAt: serverTimestamp(),
-      })
-      toast.success('Session completed')
-    } catch (err) {
-      console.error('Failed to complete session:', err)
+    const result = await callMarkComplete({ sessionId: session.id })
+    if (result) {
+      const creditsMsg =
+        result.paymentsProcessed > 0
+          ? ` — ${result.paymentsProcessed} credit${result.paymentsProcessed !== 1 ? 's' : ''} used`
+          : ''
+      toast.success(`Session completed${creditsMsg}`)
+    } else {
       toast.error('Failed to update session. Please try again.')
-    } finally {
-      setCompleting(false)
     }
   }
 

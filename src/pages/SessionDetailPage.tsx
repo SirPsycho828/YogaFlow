@@ -1,16 +1,33 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { doc, onSnapshot, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, onSnapshot, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import { httpsCallable } from 'firebase/functions'
 import { toast } from 'sonner'
 import { MapPin, Repeat } from 'lucide-react'
 import { format } from 'date-fns'
-import { db } from '@/lib/firebase'
+import { db, functions } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
+import { useCallable } from '@/hooks/useCallable'
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { PaymentBadge } from '@/components/sessions/PaymentBadge'
+import { CancelDialog } from '@/components/sessions/CancelDialog'
+import { RecurringCancelPrompt } from '@/components/sessions/RecurringCancelPrompt'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { formatTime } from '@/lib/utils'
-import type { Session, Client } from '@/types'
+import type { Session, Client, Package } from '@/types'
+
+interface MarkSessionCompleteInput { sessionId: string }
+interface MarkSessionCompleteOutput { status: string; paymentsProcessed: number }
 
 export function SessionDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -19,9 +36,18 @@ export function SessionDetailPage() {
 
   const [session, setSession] = useState<Session | null>(null)
   const [client, setClient] = useState<Client | null>(null)
+  const [activePackage, setActivePackage] = useState<Package | null>(null)
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
-  const [completing, setCompleting] = useState(false)
+  const [showCancelDialog, setShowCancelDialog] = useState(false)
+  const [showRecurringPrompt, setShowRecurringPrompt] = useState(false)
+  const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false)
+  const [showMarkUnpaidDialog, setShowMarkUnpaidDialog] = useState(false)
+
+  const {
+    call: callMarkComplete,
+    loading: completing,
+  } = useCallable<MarkSessionCompleteInput, MarkSessionCompleteOutput>('markSessionComplete')
 
   // Subscribe to session document
   useEffect(() => {
@@ -57,20 +83,77 @@ export function SessionDetailPage() {
     })
   }, [session?.clientId])
 
+  // Fetch active package for the session's client + type
+  useEffect(() => {
+    if (!session?.clientId || !user) return
+    const q = query(
+      collection(db, 'packages'),
+      where('clientId', '==', session.clientId),
+      where('type', '==', session.type),
+      where('status', '==', 'active')
+    )
+    getDocs(q).then((snap) => {
+      if (!snap.empty) {
+        setActivePackage({ id: snap.docs[0].id, ...snap.docs[0].data() } as Package)
+      } else {
+        setActivePackage(null)
+      }
+    })
+  }, [session?.clientId, session?.type, user])
+
   async function handleMarkComplete() {
     if (!session) return
-    setCompleting(true)
-    try {
-      await updateDoc(doc(db, 'sessions', session.id), {
-        status: 'completed',
-        updatedAt: serverTimestamp(),
-      })
-      toast.success('Session completed')
-    } catch (err) {
-      console.error('Failed to complete session:', err)
+    const result = await callMarkComplete({ sessionId: session.id })
+    if (result) {
+      const creditsMsg =
+        result.paymentsProcessed > 0
+          ? ` — 1 credit used${activePackage ? ` (${activePackage.remainingCredits - 1} remaining)` : ''}`
+          : ''
+      toast.success(`Session completed${creditsMsg}`)
+    } else {
       toast.error('Failed to update session. Please try again.')
-    } finally {
-      setCompleting(false)
+    }
+  }
+
+  async function handleMarkPaidWithCredit() {
+    if (!session) return
+    try {
+      const fn = httpsCallable(functions, 'deductCredit')
+      await fn({ sessionId: session.id, clientId: session.clientId, type: session.type })
+      toast.success('Marked as paid — 1 credit used')
+    } catch {
+      toast.error('Failed to mark as paid.')
+    }
+    setShowMarkPaidDialog(false)
+  }
+
+  async function handleMarkPaidManual() {
+    if (!session) return
+    try {
+      await updateDoc(doc(db, 'sessions', session.id), { paymentStatus: 'paid' })
+      toast.success('Marked as paid')
+    } catch {
+      toast.error('Failed to mark as paid.')
+    }
+    setShowMarkPaidDialog(false)
+  }
+
+  async function handleMarkUnpaid() {
+    if (!session) return
+    try {
+      await updateDoc(doc(db, 'sessions', session.id), { paymentStatus: 'unpaid' })
+      toast.success('Marked as unpaid')
+    } catch {
+      toast.error('Failed to mark as unpaid.')
+    }
+    setShowMarkUnpaidDialog(false)
+  }
+
+  function handleCancelClick() {
+    if (session?.seriesId) {
+      setShowRecurringPrompt(true)
+    } else {
+      setShowCancelDialog(true)
     }
   }
 
@@ -165,7 +248,19 @@ export function SessionDetailPage() {
       {/* Status bar */}
       <div className="flex items-center gap-2">
         <StatusBadge status={session.status} />
-        <PaymentBadge status={session.paymentStatus} />
+        {session.status === 'completed' && (
+          <PaymentBadge
+            status={session.paymentStatus}
+            onToggle={
+              session.paymentStatus === 'unpaid'
+                ? () => setShowMarkPaidDialog(true)
+                : () => setShowMarkUnpaidDialog(true)
+            }
+          />
+        )}
+        {session.status !== 'completed' && (
+          <PaymentBadge status={session.paymentStatus} />
+        )}
       </div>
 
       {/* Health notes (private sessions only, if non-empty) */}
@@ -212,10 +307,7 @@ export function SessionDetailPage() {
               <button
                 type="button"
                 className="text-sm text-destructive hover:text-destructive/80 transition-colors"
-                onClick={() => {
-                  // Cancel dialog comes in Task 19
-                  toast.info('Session cancellation coming soon')
-                }}
+                onClick={handleCancelClick}
               >
                 Cancel Session
               </button>
@@ -240,6 +332,64 @@ export function SessionDetailPage() {
           </p>
         )}
       </div>
+
+      {/* Cancel dialogs */}
+      {session.seriesId ? (
+        <RecurringCancelPrompt
+          session={session}
+          open={showRecurringPrompt}
+          onClose={() => setShowRecurringPrompt(false)}
+        />
+      ) : (
+        <CancelDialog
+          session={session}
+          open={showCancelDialog}
+          onClose={() => setShowCancelDialog(false)}
+        />
+      )}
+
+      {/* Mark paid dialog */}
+      <AlertDialog open={showMarkPaidDialog} onOpenChange={(o) => { if (!o) setShowMarkPaidDialog(false) }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Mark as paid?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {activePackage
+                ? `Use 1 credit from their package (${activePackage.remainingCredits} remaining), or mark paid manually.`
+                : 'Mark this session as paid manually.'}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            {activePackage && (
+              <AlertDialogAction variant="outline" onClick={handleMarkPaidWithCredit}>
+                Use Credit
+              </AlertDialogAction>
+            )}
+            <AlertDialogAction onClick={handleMarkPaidManual}>
+              Mark Paid
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Mark unpaid dialog */}
+      <AlertDialog open={showMarkUnpaidDialog} onOpenChange={(o) => { if (!o) setShowMarkUnpaidDialog(false) }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Mark as unpaid?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This session will be marked as unpaid.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleMarkUnpaid}>
+              Mark Unpaid
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

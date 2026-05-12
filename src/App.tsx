@@ -11,6 +11,8 @@ import { TodayPage } from '@/pages/TodayPage'
 import { CalendarPage } from '@/pages/CalendarPage'
 import { ClientsPage } from '@/pages/ClientsPage'
 import { ClientCreatePage } from '@/pages/ClientCreatePage'
+import { ClientDetailPage } from '@/pages/ClientDetailPage'
+import { ClientEditPage } from '@/pages/ClientEditPage'
 import { ClassesPage } from '@/pages/ClassesPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 
@@ -41,6 +43,8 @@ export default function App() {
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/clients" element={<ClientsPage />} />
             <Route path="/clients/new" element={<ClientCreatePage />} />
+            <Route path="/clients/:id" element={<ClientDetailPage />} />
+            <Route path="/clients/:id/edit" element={<ClientEditPage />} />
             <Route path="/classes" element={<ClassesPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>

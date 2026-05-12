@@ -7,9 +7,10 @@ import {
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore'
+import { httpsCallable } from 'firebase/functions'
 import { toast } from 'sonner'
 import { Repeat } from 'lucide-react'
-import { db } from '@/lib/firebase'
+import { db, functions } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -187,11 +188,43 @@ export function SessionEditPage() {
     doSave(true)
   }
 
-  function handleSeriesDialogFuture() {
+  async function handleSeriesDialogFuture() {
     setSeriesDialogOpen(false)
     setPendingSubmit(false)
-    toast.info('Bulk edit coming soon')
-    doSave(true)
+
+    if (!original || !original.seriesId) return
+
+    setSubmitting(true)
+    try {
+      // Build updates from changed fields
+      const updates: Record<string, string> = {}
+      if (clientName !== original.title) updates.title = clientName
+      if (startTime !== original.startTime) updates.startTime = startTime
+      if (endTime !== original.endTime) updates.endTime = endTime
+      const trimmedLocation = location.trim()
+      if (trimmedLocation !== original.location) updates.location = trimmedLocation
+
+      if (Object.keys(updates).length === 0) {
+        navigate(`/sessions/${original.id}`)
+        return
+      }
+
+      const editSeries = httpsCallable(functions, 'editRecurringSeries')
+      await editSeries({
+        seriesId: original.seriesId,
+        editMode: 'future',
+        sessionId: original.id,
+        updates,
+      })
+
+      toast.success('Future sessions updated')
+      navigate(`/sessions/${original.id}`)
+    } catch (err) {
+      console.error('Failed to edit series:', err)
+      toast.error('Failed to update future sessions. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (loading) {

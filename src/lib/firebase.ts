@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app'
 import { getAuth, browserLocalPersistence, setPersistence } from 'firebase/auth'
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore'
 import { getDatabase } from 'firebase/database'
+import { getFunctions } from 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -26,5 +27,7 @@ export const db = initializeFirestore(app, {
 })
 
 export const rtdb = getDatabase(app)
+
+export const functions = getFunctions(app)
 
 export default app

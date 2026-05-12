@@ -6,9 +6,11 @@ import {
   serverTimestamp,
   Timestamp,
 } from 'firebase/firestore'
+import { httpsCallable } from 'firebase/functions'
 import { toast } from 'sonner'
-import { db } from '@/lib/firebase'
+import { db, functions } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
+import { buildRRule } from '@/lib/rrule'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -95,39 +97,54 @@ export function SessionCreatePage() {
       return
     }
 
-    if (repeat) {
-      toast.info('Recurring sessions coming soon')
-      // Fall through to create a single session anyway
-    }
-
     setSubmitting(true)
     try {
-      // Midnight UTC for the selected date
-      const sessionDate = new Date(date!)
-      sessionDate.setHours(0, 0, 0, 0)
+      if (repeat) {
+        // Build RRULE and call Cloud Function
+        const rruleStr = buildRRule(date!, frequency, untilEnabled ? untilDate : undefined)
+        const createSeries = httpsCallable(functions, 'createRecurringSeries')
+        const result = await createSeries({
+          rrule: rruleStr,
+          type: 'private',
+          linkedId: clientId,
+          sessionDefaults: {
+            title: clientName,
+            startTime,
+            endTime,
+            location: location.trim(),
+          },
+        })
+        const data = result.data as { sessionsCreated: number }
+        toast.success(`Recurring sessions created (${data.sessionsCreated} sessions)`)
+        navigate('/')
+      } else {
+        // Single session creation
+        const sessionDate = new Date(date!)
+        sessionDate.setHours(0, 0, 0, 0)
 
-      await addDoc(collection(db, 'sessions'), {
-        instructorId: user.uid,
-        type: 'private',
-        clientId: clientId,
-        groupClassId: null,
-        title: clientName,
-        date: Timestamp.fromDate(sessionDate),
-        startTime,
-        endTime,
-        location: location.trim(),
-        status: 'scheduled',
-        paymentStatus: 'unpaid',
-        notes: '',
-        seriesId: null,
-        isException: false,
-        cancelledAt: null,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      })
+        await addDoc(collection(db, 'sessions'), {
+          instructorId: user.uid,
+          type: 'private',
+          clientId: clientId,
+          groupClassId: null,
+          title: clientName,
+          date: Timestamp.fromDate(sessionDate),
+          startTime,
+          endTime,
+          location: location.trim(),
+          status: 'scheduled',
+          paymentStatus: 'unpaid',
+          notes: '',
+          seriesId: null,
+          isException: false,
+          cancelledAt: null,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        })
 
-      toast.success('Session created')
-      navigate('/')
+        toast.success('Session created')
+        navigate('/')
+      }
     } catch (err) {
       console.error('Failed to create session:', err)
       toast.error('Failed to create session. Please try again.')

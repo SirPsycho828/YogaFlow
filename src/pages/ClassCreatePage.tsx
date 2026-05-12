@@ -10,10 +10,12 @@ import {
   where,
   orderBy,
 } from 'firebase/firestore'
+import { httpsCallable } from 'firebase/functions'
 import { toast } from 'sonner'
 import { Search, Check } from 'lucide-react'
-import { db } from '@/lib/firebase'
+import { db, functions } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
+import { buildRRule } from '@/lib/rrule'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -52,8 +54,11 @@ export function ClassCreatePage() {
   const [endTime, setEndTime] = useState('')
   const [endTimeManual, setEndTimeManual] = useState(false)
 
-  // Recurrence (stub)
+  // Recurrence
   const [repeat, setRepeat] = useState(false)
+  const [frequency, setFrequency] = useState<'weekly' | 'biweekly' | 'monthly'>('weekly')
+  const [untilEnabled, setUntilEnabled] = useState(false)
+  const [untilDate, setUntilDate] = useState<Date | undefined>(undefined)
 
   const [submitting, setSubmitting] = useState(false)
 
@@ -123,10 +128,6 @@ export function ClassCreatePage() {
       return
     }
 
-    if (repeat) {
-      toast.info('Recurring classes coming soon')
-    }
-
     setSubmitting(true)
     try {
       const rosterArray = Array.from(rosterIds)
@@ -143,46 +144,66 @@ export function ClassCreatePage() {
         updatedAt: serverTimestamp(),
       })
 
-      // 2. Create session document
-      const sessionDate = new Date(date!)
-      sessionDate.setHours(0, 0, 0, 0)
+      if (repeat) {
+        // Build RRULE and call Cloud Function for recurring series
+        const rruleStr = buildRRule(date!, frequency, untilEnabled ? untilDate : undefined)
+        const createSeries = httpsCallable(functions, 'createRecurringSeries')
+        const result = await createSeries({
+          rrule: rruleStr,
+          type: 'group',
+          linkedId: classRef.id,
+          sessionDefaults: {
+            title: name.trim(),
+            startTime,
+            endTime,
+            location: location.trim(),
+          },
+        })
+        const data = result.data as { sessionsCreated: number }
+        toast.success(`Recurring class created (${data.sessionsCreated} sessions)`)
+        navigate(`/classes/${classRef.id}`)
+      } else {
+        // Single session creation
+        const sessionDate = new Date(date!)
+        sessionDate.setHours(0, 0, 0, 0)
 
-      const sessionRef = await addDoc(collection(db, 'sessions'), {
-        instructorId: user.uid,
-        type: 'group',
-        clientId: null,
-        groupClassId: classRef.id,
-        title: name.trim(),
-        date: Timestamp.fromDate(sessionDate),
-        startTime,
-        endTime,
-        location: location.trim(),
-        status: 'scheduled',
-        paymentStatus: 'unpaid',
-        notes: '',
-        seriesId: null,
-        isException: false,
-        cancelledAt: null,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      })
+        const sessionRef = await addDoc(collection(db, 'sessions'), {
+          instructorId: user.uid,
+          type: 'group',
+          clientId: null,
+          groupClassId: classRef.id,
+          title: name.trim(),
+          date: Timestamp.fromDate(sessionDate),
+          startTime,
+          endTime,
+          location: location.trim(),
+          status: 'scheduled',
+          paymentStatus: 'unpaid',
+          notes: '',
+          seriesId: null,
+          isException: false,
+          cancelledAt: null,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        })
 
-      // 3. Create attendance documents for each roster client
-      await Promise.all(
-        rosterArray.map((clientId) =>
-          addDoc(collection(db, 'attendance'), {
-            instructorId: user.uid,
-            sessionId: sessionRef.id,
-            clientId,
-            attended: false,
-            paymentStatus: 'unpaid',
-            createdAt: serverTimestamp(),
-          })
+        // Create attendance documents for each roster client
+        await Promise.all(
+          rosterArray.map((clientId) =>
+            addDoc(collection(db, 'attendance'), {
+              instructorId: user.uid,
+              sessionId: sessionRef.id,
+              clientId,
+              attended: false,
+              paymentStatus: 'unpaid',
+              createdAt: serverTimestamp(),
+            })
+          )
         )
-      )
 
-      toast.success('Class created')
-      navigate(`/classes/${classRef.id}`)
+        toast.success('Class created')
+        navigate(`/classes/${classRef.id}`)
+      }
     } catch (err) {
       console.error('Failed to create class:', err)
       toast.error('Failed to create class. Please try again.')
@@ -347,33 +368,82 @@ export function ClassCreatePage() {
         </div>
 
         {/* Repeat toggle */}
-        <div className="flex items-center justify-between">
-          <Label htmlFor="repeat-toggle" className="cursor-pointer">
-            Repeat
-          </Label>
-          <button
-            id="repeat-toggle"
-            type="button"
-            role="switch"
-            aria-checked={repeat}
-            onClick={() => setRepeat((v) => !v)}
-            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-              repeat ? 'bg-primary' : 'bg-input'
-            }`}
-          >
-            <span
-              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                repeat ? 'translate-x-5' : 'translate-x-0'
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="repeat-toggle" className="cursor-pointer">
+              Repeat
+            </Label>
+            <button
+              id="repeat-toggle"
+              type="button"
+              role="switch"
+              aria-checked={repeat}
+              onClick={() => setRepeat((v) => !v)}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                repeat ? 'bg-primary' : 'bg-input'
               }`}
-            />
-          </button>
-        </div>
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                  repeat ? 'translate-x-5' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
 
-        {repeat && (
-          <p className="text-sm text-muted-foreground -mt-2">
-            Recurring schedule coming soon. A single session will be created.
-          </p>
-        )}
+          {repeat && (
+            <div className="space-y-3 pl-1">
+              {/* Frequency */}
+              <div className="space-y-1.5">
+                <Label>Frequency</Label>
+                <select
+                  value={frequency}
+                  onChange={(e) =>
+                    setFrequency(e.target.value as typeof frequency)
+                  }
+                  className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs focus:outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                >
+                  <option value="weekly">Every week</option>
+                  <option value="biweekly">Every 2 weeks</option>
+                  <option value="monthly">Every month</option>
+                </select>
+              </div>
+
+              {/* End condition */}
+              <div className="space-y-1.5">
+                <Label>Ends</Label>
+                <div className="flex flex-col gap-2">
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="radio"
+                      name="until"
+                      checked={!untilEnabled}
+                      onChange={() => setUntilEnabled(false)}
+                      className="accent-primary"
+                    />
+                    No end date
+                  </label>
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="radio"
+                      name="until"
+                      checked={untilEnabled}
+                      onChange={() => setUntilEnabled(true)}
+                      className="accent-primary"
+                    />
+                    Until date
+                  </label>
+                </div>
+
+                {untilEnabled && (
+                  <div className="pt-1">
+                    <DatePicker value={untilDate} onChange={setUntilDate} />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
 
         <Button type="submit" className="w-full" disabled={submitting}>
           {submitting ? 'Creating...' : 'Create Class'}

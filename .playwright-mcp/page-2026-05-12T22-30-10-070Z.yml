@@ -1,0 +1,26 @@
+- generic [ref=e2]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - heading "YogaFlow" [level=1] [ref=e9]
+      - paragraph [ref=e10]: Welcome back to your practice
+    - button "Continue with Google" [ref=e11]:
+      - img
+      - text: Continue with Google
+    - generic [ref=e16]: or
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]: Email
+        - textbox "Email" [ref=e20]:
+          - /placeholder: you@example.com
+      - generic [ref=e21]:
+        - generic [ref=e22]: Password
+        - textbox "Password" [ref=e23]:
+          - /placeholder: ••••••••
+      - link "Forgot password?" [ref=e25] [cursor=pointer]:
+        - /url: /reset-password
+      - button "Sign In" [ref=e26]
+    - paragraph [ref=e27]:
+      - text: Don't have an account?
+      - link "Get started" [ref=e28] [cursor=pointer]:
+        - /url: /signup
+  - region "Notifications alt+T"

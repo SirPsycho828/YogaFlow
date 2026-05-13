@@ -187,39 +187,56 @@ export function LandingPage() {
           style={{ background: 'radial-gradient(circle, hsl(var(--primary)), transparent 70%)' }}
         />
 
-        <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 hero-stagger">
-          {/* Signature gradient bar */}
-          <div className="mx-auto mb-8 h-1 w-16 rounded-full gradient-golden" />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 hero-stagger">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left column: text content */}
+            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+              {/* Signature gradient bar */}
+              <div className="mx-auto lg:mx-0 mb-8 h-1 w-16 rounded-full gradient-golden" />
 
-          <h1 className="font-heading text-4xl leading-[1.15] text-foreground sm:text-5xl md:text-6xl">
-            Your Yoga Practice,{' '}
-            <span className="gradient-golden-text">Beautifully Organized</span>
-          </h1>
+              <h1 className="font-heading text-4xl leading-[1.15] text-foreground sm:text-5xl md:text-6xl">
+                Your Yoga Practice,{' '}
+                <span className="gradient-golden-text">Beautifully Organized</span>
+              </h1>
 
-          <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
-            Track clients, schedule sessions, manage payments — everything a solo yoga instructor
-            needs, right from your phone.
-          </p>
+              <p className="mx-auto lg:mx-0 mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">
+                Track clients, schedule sessions, manage payments — everything a solo yoga instructor
+                needs, right from your phone.
+              </p>
 
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link
-              to="/signup"
-              className="inline-flex h-12 w-full items-center justify-center rounded-md gradient-golden px-8 text-base font-semibold text-white shadow-md transition-all hover:opacity-90 hover:shadow-lg sm:w-auto"
-            >
-              Get Started Free
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-            <a
-              href="#how-it-works"
-              className="inline-flex h-12 w-full items-center justify-center rounded-md border border-border bg-card px-8 text-base font-medium text-foreground transition-colors hover:bg-secondary sm:w-auto"
-            >
-              See How It Works
-            </a>
+              <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
+                <Link
+                  to="/signup"
+                  className="inline-flex h-12 w-full items-center justify-center rounded-md gradient-golden px-8 text-base font-semibold text-white shadow-md transition-all hover:opacity-90 hover:shadow-lg sm:w-auto"
+                >
+                  Get Started Free
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+                <a
+                  href="#how-it-works"
+                  className="inline-flex h-12 w-full items-center justify-center rounded-md border border-border bg-card px-8 text-base font-medium text-foreground transition-colors hover:bg-secondary sm:w-auto"
+                >
+                  See How It Works
+                </a>
+              </div>
+
+              <p className="mt-4 text-sm text-muted-foreground">
+                Free to use. No credit card required.
+              </p>
+            </div>
+
+            {/* Right column: hero image (desktop only) */}
+            <div className="hidden lg:block">
+              <div className="aspect-[4/5] overflow-hidden rounded-2xl shadow-xl border border-border/40">
+                <img
+                  src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80&auto=format&fit=crop"
+                  alt="Yoga instructor meditating with a view of lush jungle canopy in Bali"
+                  className="w-full h-auto object-cover rounded-2xl"
+                  loading="lazy"
+                />
+              </div>
+            </div>
           </div>
-
-          <p className="mt-4 text-sm text-muted-foreground">
-            Free to use. No credit card required.
-          </p>
         </div>
       </section>
 
@@ -234,6 +251,16 @@ export function LandingPage() {
               Built specifically for solo yoga instructors. No bloat, no complexity — just the tools
               you actually use.
             </p>
+          </div>
+
+          {/* Lifestyle photo */}
+          <div className="mt-10 mb-12 overflow-hidden rounded-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1677741447985-da1d90c00742?w=1200&q=80&auto=format&fit=crop"
+              alt="A yoga class in session at a warm, sunlit studio"
+              className="w-full h-64 sm:h-80 object-cover"
+              loading="lazy"
+            />
           </div>
 
           {/* Bento grid */}

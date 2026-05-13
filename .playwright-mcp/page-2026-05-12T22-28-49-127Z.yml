@@ -1,0 +1,56 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - button "Go to inbox" [ref=e6] [cursor=pointer]:
+        - img "AMC" [ref=e7]
+      - generic [ref=e8]: Agent Mission Control
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - button "Mute notifications" [ref=e14] [cursor=pointer]:
+            - img [ref=e15]
+          - button "Send feedback" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+          - button "Settings" [ref=e30] [cursor=pointer]:
+            - img [ref=e31]
+        - button "More toolbar items" [ref=e35] [cursor=pointer]:
+          - img [ref=e36]
+      - generic [ref=e41]:
+        - button "Focus Mode (off)" [ref=e42] [cursor=pointer]:
+          - img [ref=e43]
+        - button "Focus Mode settings" [ref=e46] [cursor=pointer]:
+          - img [ref=e47]
+      - button "No account" [ref=e50] [cursor=pointer]:
+        - generic [ref=e51]: No account
+        - img [ref=e52]
+  - main [ref=e55]:
+    - generic [ref=e57]:
+      - complementary "Project navigation" [ref=e58]:
+        - generic [ref=e59]:
+          - generic [ref=e60]: Projects
+          - button "Add" [ref=e63] [cursor=pointer]:
+            - img [ref=e64]
+        - button "Inbox" [ref=e66] [cursor=pointer]:
+          - img [ref=e67]
+          - generic [ref=e70]: Inbox
+        - generic [ref=e74]:
+          - img [ref=e76]
+          - heading "Get Started" [level=3] [ref=e81]
+          - paragraph [ref=e82]: Add a project folder to start managing your AI sessions
+          - button "Add Project" [ref=e83] [cursor=pointer]:
+            - img [ref=e84]
+            - text: Add Project
+      - complementary "Session navigation" [ref=e88]:
+        - generic [ref=e89]:
+          - generic [ref=e90]: Sessions
+          - button "Search conversations" [ref=e91] [cursor=pointer]:
+            - img [ref=e92]
+        - generic [ref=e97]:
+          - img [ref=e99]
+          - heading "Select a project" [level=3] [ref=e101]
+          - paragraph [ref=e102]: Choose a project from the sidebar to view its sessions
+      - generic [ref=e108]:
+        - img [ref=e110]
+        - heading "Select a project" [level=3] [ref=e112]
+        - paragraph [ref=e113]: Choose a project from the sidebar to view its sessions
+  - region "Notifications"

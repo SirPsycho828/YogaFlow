@@ -27,18 +27,36 @@ export function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-background px-4 overflow-hidden">
-      {/* Decorative orbs */}
-      <div
-        className="absolute top-[-10%] right-[-15%] w-[400px] h-[400px] rounded-full opacity-[0.07]"
-        style={{ background: 'radial-gradient(circle, hsl(var(--accent)), transparent 70%)' }}
-      />
-      <div
-        className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] rounded-full opacity-[0.05]"
-        style={{ background: 'radial-gradient(circle, hsl(var(--primary)), transparent 70%)' }}
-      />
+    <div className="relative flex min-h-screen bg-background">
+      {/* Image Panel - hidden on mobile, shown on lg+ */}
+      <div className="hidden lg:block lg:w-1/2 relative">
+        <img
+          src="https://images.unsplash.com/photo-1729886484967-a93f9d5df220?w=800&h=1200&q=80&auto=format&fit=crop"
+          alt="Yoga instructor in a warmly lit studio by a window"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Warm overlay to match design system */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10" />
+        {/* Brand text at bottom of image */}
+        <div className="absolute bottom-8 left-8 right-8">
+          <p className="font-heading text-2xl text-white">YogaFlow</p>
+          <p className="mt-1 text-sm text-white/70">Welcome back to your practice</p>
+        </div>
+      </div>
 
-      <div className="relative w-full max-w-sm space-y-8">
+      {/* Form Panel */}
+      <div className="relative flex w-full items-center justify-center px-4 lg:w-1/2">
+        {/* Decorative orbs */}
+        <div
+          className="absolute top-[-10%] right-[-15%] w-[400px] h-[400px] rounded-full opacity-[0.07]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent)), transparent 70%)' }}
+        />
+        <div
+          className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] rounded-full opacity-[0.05]"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary)), transparent 70%)' }}
+        />
+
+        <div className="relative w-full max-w-sm space-y-8">
         {/* Brand header */}
         <div className="text-center">
           <div className="mx-auto mb-4 h-1 w-12 rounded-full gradient-golden" />
@@ -134,6 +152,7 @@ export function LoginPage() {
             Get started
           </Link>
         </p>
+        </div>
       </div>
     </div>
   )

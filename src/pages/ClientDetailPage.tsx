@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import { PageHeader } from '@/components/ui/page-header'
 import {
   doc,
   onSnapshot,
@@ -142,35 +143,28 @@ export function ClientDetailPage() {
 
   return (
     <div className="py-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => navigate('/clients')}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          ← Clients
-        </button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => navigate(`/clients/${client.id}/edit`)}
-        >
-          Edit
-        </Button>
-      </div>
+      <PageHeader
+        title={client.name}
+        backTo="/clients"
+        actions={
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => navigate(`/clients/${client.id}/edit`)}
+          >
+            Edit
+          </Button>
+        }
+      />
 
-      {/* Client name + avatar */}
+      {/* Client avatar + archived badge */}
       <div className="flex items-center gap-4">
         <InitialsAvatar name={client.name} size="lg" />
-        <div>
-          <h1 className="text-2xl font-bold font-heading text-foreground">{client.name}</h1>
-          {isArchived && (
-            <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
-              Archived
-            </span>
-          )}
-        </div>
+        {isArchived && (
+          <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
+            Archived
+          </span>
+        )}
       </div>
 
       {/* Contact section */}

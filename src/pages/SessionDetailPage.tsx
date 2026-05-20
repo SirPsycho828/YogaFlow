@@ -305,7 +305,7 @@ export function SessionDetailPage() {
         {session.status === 'scheduled' && (
           <>
             <Button
-              className="w-full gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
+              className="w-full gradient-studio text-primary-foreground border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
               onClick={handleMarkComplete}
               disabled={completing}
             >

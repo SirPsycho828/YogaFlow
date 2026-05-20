@@ -36,7 +36,7 @@ export function DateScroller({ selectedDate, onSelect }: DateScrollerProps) {
               className={cn(
                 'flex shrink-0 flex-col items-center rounded-xl px-3 py-2 transition-all duration-150',
                 selected
-                  ? 'gradient-golden text-white shadow-md'
+                  ? 'gradient-studio text-primary-foreground shadow-md'
                   : 'bg-card hover:bg-secondary',
                 today && !selected && 'ring-1 ring-primary/30',
               )}

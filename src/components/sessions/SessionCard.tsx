@@ -64,7 +64,7 @@ export function SessionCard({
         </div>
 
         {/* Divider — gradient accent */}
-        <div className="w-0.5 self-stretch rounded-full shrink-0 gradient-golden opacity-40" />
+        <div className="w-0.5 self-stretch rounded-full shrink-0 gradient-studio opacity-40" />
 
         {/* Right column: details */}
         <div className="flex-1 min-w-0">

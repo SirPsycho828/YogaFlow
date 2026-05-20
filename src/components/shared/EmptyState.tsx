@@ -19,7 +19,7 @@ export function EmptyState({ icon: Icon, heading, description, actionLabel, onAc
       <p className="mt-2 max-w-xs text-sm text-muted-foreground">{description}</p>
       {actionLabel && onAction && (
         <Button
-          className="mt-6 gradient-golden text-white font-semibold shadow-sm hover:opacity-90 border-0"
+          className="mt-6 gradient-studio text-primary-foreground font-semibold shadow-sm hover:opacity-90 border-0"
           onClick={onAction}
         >
           {actionLabel}

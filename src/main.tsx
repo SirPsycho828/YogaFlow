@@ -18,11 +18,11 @@ if (typeof window !== 'undefined') {
       '╚╦╝║ ║║ ╦╠═╣',
       ' ╩ ╚═╝╚═╝╩ ╩  flow',
     ].join('\n'),
-    'color: #B8664E; font-family: monospace; font-size: 14px; font-weight: bold;'
+    'color: #C4956A; font-family: monospace; font-size: 14px; font-weight: bold;'
   )
   console.log(
     '%cBreathe in. Schedule out.',
-    'color: #D4A95A; font-size: 12px; font-style: italic;'
+    'color: #8E6B4A; font-size: 12px; font-style: italic;'
   )
 }
 

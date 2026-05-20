@@ -29,7 +29,7 @@ export function StepClassTypes({ selected, onChange }: StepClassTypesProps) {
           className={cn(
             'rounded-full border px-4 py-2 text-sm font-medium transition-all duration-150',
             selected.includes(type)
-              ? 'gradient-golden text-white border-transparent shadow-sm'
+              ? 'gradient-studio text-primary-foreground border-transparent shadow-sm'
               : 'border-border bg-card text-foreground hover:border-primary/30',
           )}
         >

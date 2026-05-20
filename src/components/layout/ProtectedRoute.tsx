@@ -5,7 +5,7 @@ function LoadingScreen() {
   return (
     <div className="flex h-screen items-center justify-center bg-background">
       <div className="text-center">
-        <div className="mx-auto h-10 w-10 rounded-full gradient-golden animate-pulse" />
+        <div className="mx-auto h-10 w-10 rounded-full gradient-studio animate-pulse" />
         <p className="mt-4 font-heading text-lg text-foreground">YogaFlow</p>
         <p className="mt-1 text-xs text-muted-foreground">Loading your practice...</p>
       </div>

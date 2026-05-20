@@ -47,7 +47,7 @@ export function SettingsPage() {
         <div className="flex items-center gap-4">
           <InitialsAvatar
             name={instructor?.displayName || user?.displayName || user?.email || '?'}
-            className="h-14 w-14 text-lg"
+            size="lg"
           />
           <div className="min-w-0">
             <p className="font-semibold text-foreground truncate">

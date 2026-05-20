@@ -162,7 +162,7 @@ export function ClientDetailPage() {
 
       {/* Client name + avatar */}
       <div className="flex items-center gap-4">
-        <InitialsAvatar name={client.name} className="h-14 w-14 text-lg" />
+        <InitialsAvatar name={client.name} size="lg" />
         <div>
           <h1 className="text-2xl font-bold font-heading text-foreground">{client.name}</h1>
           {isArchived && (

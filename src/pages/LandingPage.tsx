@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { Testimonials } from '@/components/landing/Testimonials'
+import { FAQ } from '@/components/landing/FAQ'
+import { Footer } from '@/components/landing/Footer'
 import {
   Users,
   CalendarCheck,
@@ -285,6 +288,8 @@ export function LandingPage() {
         </div>
       </section>
 
+      <Testimonials />
+
       {/* How It Works */}
       <section id="how-it-works" className="py-20 sm:py-28 bg-secondary/40 reveal">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
@@ -319,6 +324,8 @@ export function LandingPage() {
         </div>
       </section>
 
+      <FAQ />
+
       {/* Final CTA */}
       <section className="py-20 sm:py-28 reveal">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
@@ -349,17 +356,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-10">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-            <p className="font-heading text-lg text-foreground">YogaFlow</p>
-            <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} YogaFlow. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

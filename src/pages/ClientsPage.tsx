@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ClientRow } from '@/components/clients/ClientRow'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { PageHeader } from '@/components/ui/page-header'
 import type { Client } from '@/types'
 
 export function ClientsPage() {
@@ -52,14 +53,15 @@ export function ClientsPage() {
 
   return (
     <div className="py-6 space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold font-heading text-foreground">Clients</h1>
-        <Button size="sm" className="gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg" onClick={() => navigate('/clients/new')}>
-          <UserPlus className="h-4 w-4" />
-          Add Client
-        </Button>
-      </div>
+      <PageHeader
+        title="Clients"
+        actions={
+          <Button size="sm" className="gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg" onClick={() => navigate('/clients/new')}>
+            <UserPlus className="h-4 w-4" />
+            Add Client
+          </Button>
+        }
+      />
 
       {/* Search */}
       <div className="relative">

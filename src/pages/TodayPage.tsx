@@ -7,7 +7,7 @@ import {
   Timestamp,
   getDocs,
 } from 'firebase/firestore'
-import { format, isToday, startOfDay } from 'date-fns'
+import { isToday, startOfDay } from 'date-fns'
 import {
   CalendarIcon,
   WifiOff,
@@ -25,13 +25,11 @@ import { FAB } from '@/components/today/FAB'
 import { NotesSheet } from '@/components/sessions/NotesSheet'
 import { PrepSheet } from '@/components/sessions/PrepSheet'
 import { GroupPrepSheet } from '@/components/sessions/GroupPrepSheet'
-import { Button } from '@/components/ui/button'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Calendar } from '@/components/ui/calendar'
+import { GreetingHero } from '@/components/today/GreetingHero'
+import { DateScroller } from '@/components/today/DateScroller'
+import { SkeletonCard } from '@/components/ui/skeleton-card'
+import { EmptyState } from '@/components/shared/EmptyState'
+import { getSessionDuration } from '@/lib/utils'
 import type { Session, Attendance, GroupClass } from '@/types'
 
 // Returns a Firestore Timestamp at midnight local time for the given Date
@@ -47,12 +45,11 @@ function currentHHmm(): string {
 }
 
 export function TodayPage() {
-  const { user } = useAuth()
+  const { user, instructor } = useAuth()
   const isOnline = useOnlineStatus()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [calendarOpen, setCalendarOpen] = useState(false)
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
   const [showCancelled, setShowCancelled] = useState(false)
@@ -177,13 +174,11 @@ export function TodayPage() {
   const hasCancelled = sessions.some((s) => s.status === 'cancelled')
 
   // Day summary counts (exclude cancelled)
-  const privateSessions = sessions.filter((s) => s.type === 'private' && s.status !== 'cancelled')
-  const groupSessionsAll = sessions.filter((s) => s.type === 'group' && s.status !== 'cancelled')
-  const totalActive = privateSessions.length + groupSessionsAll.length
-
-  const summaryParts: string[] = []
-  if (privateSessions.length > 0) summaryParts.push(`${privateSessions.length} private`)
-  if (groupSessionsAll.length > 0) summaryParts.push(`${groupSessionsAll.length} group`)
+  const activeSessions = sessions.filter(s => s.status !== 'cancelled')
+  const totalActive = activeSessions.length
+  const totalMinutes = activeSessions.reduce(
+    (sum, s) => sum + getSessionDuration(s.startTime, s.endTime), 0
+  )
 
   // Now divider placement: index of the last session that starts at/before current time.
   // The divider is rendered AFTER that session. -1 means all sessions are future (divider goes first).
@@ -198,13 +193,6 @@ export function TodayPage() {
     }
     return idx
   }, [visibleSessions, viewingToday])
-
-  function handleDateSelect(date: Date | undefined) {
-    if (date) {
-      setSelectedDate(date)
-      setCalendarOpen(false)
-    }
-  }
 
   function handleAddNotes(session: Session) {
     setNotesSession(session)
@@ -222,46 +210,27 @@ export function TodayPage() {
     return count > 0 ? `Group (${count})` : 'Group'
   }
 
-  const dateHeadingLabel = viewingToday
-    ? `Today — ${format(selectedDate, 'EEEE, MMMM d')}`
-    : format(selectedDate, 'EEEE, MMMM d')
-
   return (
     <div className="py-6 space-y-4">
-      {/* Header */}
+      {/* Greeting hero */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold font-heading text-foreground">Today</h1>
-        <div className="flex items-center gap-2">
-          {!isOnline && (
-            <WifiOff className="h-4 w-4 text-muted-foreground" aria-label="Offline" />
-          )}
-          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Pick date">
-                <CalendarIcon className="h-5 w-5 text-muted-foreground" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-              />
-            </PopoverContent>
-          </Popover>
+        <div className="flex-1">
+          <GreetingHero
+            displayName={instructor?.displayName || user?.displayName || 'there'}
+            sessionCount={totalActive}
+            totalMinutes={totalMinutes}
+          />
         </div>
-      </div>
-
-      {/* Date context line */}
-      <div className="space-y-0.5">
-        <p className="text-sm font-medium font-heading text-foreground">{dateHeadingLabel}</p>
-        {!loading && totalActive > 0 && (
-          <p className="text-xs text-muted-foreground">
-            {totalActive} {totalActive === 1 ? 'session' : 'sessions'}
-            {summaryParts.length > 0 ? ` — ${summaryParts.join(', ')}` : ''}
-          </p>
+        {!isOnline && (
+          <WifiOff className="h-4 w-4 text-muted-foreground shrink-0" aria-label="Offline" />
         )}
       </div>
+
+      {/* Date scroller */}
+      <DateScroller
+        selectedDate={selectedDate}
+        onSelect={(date) => setSelectedDate(date)}
+      />
 
       {/* Back to Today chip */}
       {!viewingToday && (
@@ -288,14 +257,11 @@ export function TodayPage() {
         </div>
       )}
 
-      {/* Loading state — 3 skeleton cards */}
+      {/* Loading state */}
       {loading && (
         <div className="space-y-3">
           {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="h-20 rounded-xl border border-border bg-card shadow-sm animate-pulse"
-            />
+            <SkeletonCard key={i} />
           ))}
         </div>
       )}
@@ -304,37 +270,30 @@ export function TodayPage() {
       {!loading && visibleSessions.length === 0 && (
         <>
           {viewingToday && (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <CalendarOff className="h-12 w-12 text-primary/40" />
-              <h2 className="mt-4 text-lg font-heading font-medium">No sessions today</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Enjoy your day off, or add a session.
-              </p>
-              <Button
-                className="mt-6 gradient-golden text-white border-0"
-                onClick={() => {
-                  const fab = document.querySelector<HTMLButtonElement>('[aria-label="Add session"]')
-                  fab?.click()
-                }}
-              >
-                Add Session
-              </Button>
-            </div>
+            <EmptyState
+              icon={CalendarOff}
+              heading="No sessions today"
+              description="Enjoy your day off, or add a session."
+              actionLabel="Add Session"
+              onAction={() => {
+                const fab = document.querySelector<HTMLButtonElement>('[aria-label="Add session"]')
+                fab?.click()
+              }}
+            />
           )}
           {isFutureDate && (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <CalendarIcon className="h-12 w-12 text-primary/40" />
-              <h2 className="mt-4 text-lg font-heading font-medium">Nothing scheduled</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Tap + to add a session for this day.
-              </p>
-            </div>
+            <EmptyState
+              icon={CalendarIcon}
+              heading="Nothing scheduled"
+              description="Tap + to add a session for this day."
+            />
           )}
           {isPastDate && (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <CalendarX className="h-12 w-12 text-primary/40" />
-              <h2 className="mt-4 text-lg font-heading font-medium">No sessions on this day.</h2>
-            </div>
+            <EmptyState
+              icon={CalendarX}
+              heading="No sessions on this day"
+              description=""
+            />
           )}
         </>
       )}

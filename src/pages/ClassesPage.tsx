@@ -16,6 +16,7 @@ import { db } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { PageHeader } from '@/components/ui/page-header'
 import type { GroupClass, Session } from '@/types'
 
 interface ClassCardProps {
@@ -118,13 +119,14 @@ export function ClassesPage() {
 
   return (
     <div className="py-6 space-y-5">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground font-heading">Classes</h1>
-        <Button size="sm" className="gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg" onClick={() => navigate('/classes/new')}>
-          Create Class
-        </Button>
-      </div>
+      <PageHeader
+        title="Classes"
+        actions={
+          <Button size="sm" className="gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg" onClick={() => navigate('/classes/new')}>
+            Create Class
+          </Button>
+        }
+      />
 
       {/* Empty state */}
       {classes.length === 0 ? (

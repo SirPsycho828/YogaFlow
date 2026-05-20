@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, Navigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -56,7 +57,12 @@ export function LoginPage() {
           style={{ background: 'radial-gradient(circle, hsl(var(--primary)), transparent 70%)' }}
         />
 
-        <div className="relative w-full max-w-sm space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          className="relative w-full max-w-sm space-y-8"
+        >
         {/* Brand header */}
         <div className="text-center">
           <div className="mx-auto mb-4 h-1 w-12 rounded-full gradient-golden" />
@@ -73,12 +79,11 @@ export function LoginPage() {
 
         {/* Google Sign In */}
         <Button
-          variant="outline"
-          className="w-full h-12 rounded-lg border-border bg-card text-foreground shadow-sm transition-all hover:shadow-md"
+          className="w-full h-12 gap-3 bg-card border-2 border-primary/20 text-foreground font-semibold shadow-md hover:bg-secondary hover:border-primary/30 transition-all"
           onClick={handleGoogleSignIn}
           type="button"
         >
-          <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+          <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
@@ -152,7 +157,7 @@ export function LoginPage() {
             Get started
           </Link>
         </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   )

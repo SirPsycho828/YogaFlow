@@ -7,6 +7,8 @@ export interface Instructor {
   onboardingComplete: boolean
   fcmToken?: string
   notificationsEnabled?: boolean
+  experienceLevel?: 'beginner' | 'intermediate' | 'experienced'
+  classTypes?: string[]
   timezone?: string
   createdAt: Timestamp
   updatedAt: Timestamp

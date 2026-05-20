@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { formatTime } from '@/lib/utils'
 import { StatusBadge } from './StatusBadge'
+import { DurationBadge } from '@/components/today/DurationBadge'
+import { BadgeStatus } from '@/components/ui/badge-status'
 import type { Session } from '@/types'
 
 interface SessionCardProps {
@@ -81,8 +83,9 @@ export function SessionCard({
           )}
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             <StatusBadge status={session.status} />
+            <DurationBadge startTime={session.startTime} endTime={session.endTime} />
             {metaLine && (
-              <span className="text-xs text-muted-foreground">{metaLine}</span>
+              <BadgeStatus variant="info">{metaLine}</BadgeStatus>
             )}
           </div>
 

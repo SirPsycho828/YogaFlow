@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { PageHeader } from '@/components/ui/page-header'
 import { doc, onSnapshot, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { httpsCallable } from 'firebase/functions'
 import { toast } from 'sonner'
@@ -202,37 +203,28 @@ export function SessionDetailPage() {
 
   return (
     <div className="py-6 space-y-5">
-      {/* Header row */}
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          ← Back
-        </button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => navigate(`/sessions/${session.id}/edit`)}
-        >
-          Edit
-        </Button>
-      </div>
+      <PageHeader
+        title={session.title}
+        backTo="/today"
+        actions={
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => navigate(`/sessions/${session.id}/edit`)}
+          >
+            Edit
+          </Button>
+        }
+      />
 
-      {/* Title + recurring label */}
+      {/* Recurring label + date/time */}
       <div className="space-y-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <h1 className="text-2xl font-heading font-bold text-foreground">{session.title}</h1>
-          {session.seriesId && (
-            <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
-              <Repeat className="h-3 w-3" />
-              Recurring
-            </span>
-          )}
-        </div>
-
-        {/* Date and time */}
+        {session.seriesId && (
+          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
+            <Repeat className="h-3 w-3" />
+            Recurring
+          </span>
+        )}
         <p className="text-sm font-medium text-foreground">{fullDate}</p>
         <p className="text-sm text-muted-foreground">{timeRange}</p>
       </div>

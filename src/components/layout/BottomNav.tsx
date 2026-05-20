@@ -30,7 +30,7 @@ export function BottomNav() {
                 {isActive && (
                   <motion.span
                     layoutId="nav-indicator"
-                    className="absolute -top-px left-2 right-2 h-0.5 rounded-full gradient-golden"
+                    className="absolute -top-px left-2 right-2 h-0.5 rounded-full gradient-studio"
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}

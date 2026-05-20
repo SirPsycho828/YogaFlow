@@ -96,16 +96,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  /* Keep old name as alias for compatibility during migration */
-  .gradient-golden {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-  }
-  .gradient-golden-text {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
 }
 
 /* Glassmorphic card utility — Studio Luxe signature */

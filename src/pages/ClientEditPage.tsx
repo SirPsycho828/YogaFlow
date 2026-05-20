@@ -223,7 +223,7 @@ export function ClientEditPage() {
           </Button>
           <Button
             type="submit"
-            className="flex-1 gradient-golden text-white border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
+            className="flex-1 gradient-studio text-primary-foreground border-0 font-semibold shadow-md hover:opacity-90 hover:shadow-lg rounded-lg"
             disabled={submitting || !form.name.trim()}
           >
             {submitting ? 'Saving...' : 'Save Changes'}

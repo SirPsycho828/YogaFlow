@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { Mail } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
@@ -22,17 +23,19 @@ export function ResetPasswordPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-background px-4 overflow-hidden">
-      {/* Decorative orb */}
-      <div
-        className="absolute top-[20%] right-[-10%] w-[350px] h-[350px] rounded-full opacity-[0.06]"
-        style={{ background: 'radial-gradient(circle, hsl(var(--accent)), transparent 70%)' }}
-      />
-
-      <div className="relative w-full max-w-sm space-y-8">
+    <div className="relative flex min-h-[100svh] items-center justify-center bg-background px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+        className="w-full max-w-sm space-y-7"
+      >
         {/* Brand header */}
         <div className="text-center">
-          <div className="mx-auto mb-4 h-1 w-12 rounded-full gradient-golden" />
+          <div className="flex items-center justify-center gap-2.5 mb-4">
+            <img src="/favicon.svg" alt="" className="h-8 w-8" />
+            <span className="font-heading text-2xl text-foreground font-semibold">YogaFlow</span>
+          </div>
           <h1 className="font-heading text-3xl text-foreground">Reset Password</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Enter your email and we&apos;ll send you a reset link
@@ -41,9 +44,11 @@ export function ResetPasswordPage() {
 
         {/* Success Message */}
         {success && !error && (
-          <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-4 text-center">
-            <Mail className="mx-auto h-8 w-8 text-primary" />
-            <p className="mt-2 text-sm font-medium text-foreground">Check your inbox</p>
+          <div className="glass-card rounded-xl px-5 py-5 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full gradient-studio">
+              <Mail className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <p className="mt-3 text-sm font-medium text-foreground">Check your inbox</p>
             <p className="mt-1 text-xs text-muted-foreground">
               We sent a password reset link to {email}
             </p>
@@ -75,7 +80,7 @@ export function ResetPasswordPage() {
 
             <Button
               type="submit"
-              className="w-full h-12 rounded-lg gradient-golden text-white font-semibold shadow-md transition-all hover:opacity-90 hover:shadow-lg border-0"
+              className="w-full h-12 rounded-lg gradient-studio text-primary-foreground font-semibold shadow-md transition-all hover:opacity-90 hover:shadow-lg border-0"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Sending...' : 'Send Reset Link'}
@@ -84,11 +89,11 @@ export function ResetPasswordPage() {
         ) : null}
 
         <p className="text-center text-sm">
-          <Link to="/login" className="font-medium text-primary hover:text-primary/80 transition-colors">
+          <Link to="/login" className="font-medium text-accent hover:text-accent/80 transition-colors">
             Back to sign in
           </Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   )
 }

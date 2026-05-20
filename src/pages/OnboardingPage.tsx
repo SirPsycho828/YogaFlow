@@ -56,22 +56,12 @@ export function OnboardingPage() {
   const { heading, sub } = stepTitles[step - 1]
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-background px-4 overflow-hidden">
-      {/* Decorative orbs */}
-      <div
-        className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full opacity-[0.07]"
-        style={{ background: 'radial-gradient(circle, hsl(var(--accent)), transparent 70%)' }}
-      />
-      <div
-        className="absolute bottom-[10%] right-[-10%] w-[300px] h-[300px] rounded-full opacity-[0.05]"
-        style={{ background: 'radial-gradient(circle, hsl(var(--primary)), transparent 70%)' }}
-      />
-
+    <div className="relative flex min-h-[100svh] items-center justify-center bg-background px-4 overflow-hidden">
       <div className="relative w-full max-w-sm space-y-8">
         {/* Welcome header */}
         <div className="text-center">
-          <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full gradient-golden">
-            <Sparkles className="h-6 w-6 text-white" />
+          <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full gradient-studio shadow-md">
+            <Sparkles className="h-6 w-6 text-primary-foreground" />
           </div>
           <h1 className="font-heading text-3xl text-foreground">Welcome to YogaFlow</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -86,7 +76,7 @@ export function OnboardingPage() {
               key={s}
               className={cn(
                 'h-1.5 flex-1 rounded-full transition-all duration-300',
-                s <= step ? 'gradient-golden' : 'bg-muted',
+                s <= step ? 'gradient-studio' : 'bg-muted',
               )}
             />
           ))}
@@ -179,7 +169,7 @@ export function OnboardingPage() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={isSubmitting || classTypes.length === 0}
-                    className="w-full h-12 rounded-lg gradient-golden text-white font-semibold shadow-md transition-all hover:opacity-90 hover:shadow-lg border-0"
+                    className="w-full h-12 rounded-lg gradient-studio text-primary-foreground font-semibold shadow-md transition-all hover:opacity-90 hover:shadow-lg border-0"
                   >
                     {isSubmitting ? 'Setting up...' : 'Get Started'}
                   </Button>

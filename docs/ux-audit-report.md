@@ -178,3 +178,34 @@ Gaps:
 - **Pages with worst scores:** Calendar (4.5/9), Clients (5/9), Classes (5/9), Class Detail (4.5/9)
 - **Most common missing layer:** Next Steps (missing on 8 pages), Guidance (missing on 7 pages)
 - **Workflows at risk:** WF5 (Broken), WF1/WF2/WF3/WF4/WF6/WF7 (Bumpy)
+
+## Results
+
+### Before/After Scorecard
+
+| Page | Before | After | Delta |
+|------|--------|-------|-------|
+| Today | 5.5/9 | 9.0/9 | +3.5 |
+| Calendar | 4.5/9 | 6.5/9 | +2.0 |
+| Clients | 5.0/9 | 6.0/9 | +1.0 |
+| Client Detail | 5.5/9 | 7.0/9 | +1.5 |
+| Create Session | 4.0/7 | 7.0/7 | +3.0 |
+| Session Detail | 5.5/9 | 7.5/9 | +2.0 |
+| Edit Session | 4.0/5 | 5.0/5 | +1.0 |
+| Classes | 5.0/9 | 6.0/9 | +1.0 |
+| Create Class | 5.0/7 | 6.0/7 | +1.0 |
+| Class Detail | 4.5/9 | 6.0/9 | +1.5 |
+| Group Attendance | 5.0/9 | 6.5/9 | +1.5 |
+| Onboarding | 5.5/6 | 6.0/6 | +0.5 |
+| Reset Password | 3.0/5 | 3.5/5 | +0.5 |
+| Settings | 4.5/5 | 5.0/5 | +0.5 |
+| **Average** | **66/119** | **87/119** | **+21** |
+
+### Implementation Summary
+- **Findings resolved:** 22/26 (3 flag-only, 1 deferred)
+- **Average page score:** 55.5% -> 73.1% (+17.6pp)
+- **Workflows improved:** WF1 (Bumpy->Smooth), WF2 (Bumpy->Smooth), WF3 (Bumpy->Smooth), WF4 (Bumpy->Smooth), WF6 (Bumpy->Smooth)
+- **Components created:** NextStepCard (`src/components/ux/NextStepCard.tsx`), GuidanceTip (`src/components/ux/GuidanceTip.tsx`), TourProvider (`src/components/tour/TourProvider.tsx`), TourTooltip (`src/components/tour/TourTooltip.tsx`)
+- **Onboarding:** 6-stop app tour with custom tooltips, auto-starts after onboarding
+- **Pages modified:** 14
+- **Anti-pattern sweep:** All 8 patterns checked, zero violations

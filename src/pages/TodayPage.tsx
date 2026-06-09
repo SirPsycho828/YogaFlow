@@ -6,6 +6,7 @@ import {
   onSnapshot,
   Timestamp,
   getDocs,
+  getCountFromServer,
 } from 'firebase/firestore'
 import { isToday, startOfDay } from 'date-fns'
 import {
@@ -29,7 +30,9 @@ import { GreetingHero } from '@/components/today/GreetingHero'
 import { DateScroller } from '@/components/today/DateScroller'
 import { SkeletonCard } from '@/components/ui/skeleton-card'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { NextStepCard } from '@/components/ux/NextStepCard'
 import { getSessionDuration } from '@/lib/utils'
+import { UserPlus, BookOpen } from 'lucide-react'
 import type { Session, Attendance, GroupClass } from '@/types'
 
 // Returns a Firestore Timestamp at midnight local time for the given Date
@@ -54,6 +57,9 @@ export function TodayPage() {
   const [loading, setLoading] = useState(true)
   const [showCancelled, setShowCancelled] = useState(false)
 
+  // Client count for getting-started guidance (UX-002)
+  const [clientCount, setClientCount] = useState<number | null>(null)
+
   // Maps for group session extra data
   const [attendanceCounts, setAttendanceCounts] = useState<Map<string, number>>(new Map())
   const [groupClasses, setGroupClasses] = useState<Map<string, GroupClass>>(new Map())
@@ -61,6 +67,13 @@ export function TodayPage() {
   // Sheet state
   const [notesSession, setNotesSession] = useState<Session | null>(null)
   const [prepSession, setPrepSession] = useState<Session | null>(null)
+
+  // Fetch client count for getting-started guidance
+  useEffect(() => {
+    if (!user) return
+    const q = query(collection(db, 'clients'), where('instructorId', '==', user.uid))
+    getCountFromServer(q).then((snap) => setClientCount(snap.data().count))
+  }, [user])
 
   // Subscribe to sessions for selected date
   useEffect(() => {
@@ -176,9 +189,13 @@ export function TodayPage() {
   // Day summary counts (exclude cancelled)
   const activeSessions = sessions.filter(s => s.status !== 'cancelled')
   const totalActive = activeSessions.length
+  const completedCount = activeSessions.filter(s => s.status === 'completed').length
   const totalMinutes = activeSessions.reduce(
     (sum, s) => sum + getSessionDuration(s.startTime, s.endTime), 0
   )
+
+  // Show getting-started guidance for new users
+  const showGettingStarted = !loading && viewingToday && clientCount === 0 && sessions.length === 0
 
   // Now divider placement: index of the last session that starts at/before current time.
   // The divider is rendered AFTER that session. -1 means all sessions are future (divider goes first).
@@ -219,6 +236,7 @@ export function TodayPage() {
             displayName={instructor?.displayName || user?.displayName || 'there'}
             sessionCount={totalActive}
             totalMinutes={totalMinutes}
+            completedCount={completedCount}
           />
         </div>
         {!isOnline && (
@@ -266,8 +284,29 @@ export function TodayPage() {
         </div>
       )}
 
+      {/* Getting started guidance for new users */}
+      {showGettingStarted && (
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-foreground">Get started</p>
+          <NextStepCard
+            icon={UserPlus}
+            title="Add your first client"
+            description="Create a client profile to start scheduling sessions"
+            to="/clients/new"
+            actionLabel="Add"
+          />
+          <NextStepCard
+            icon={BookOpen}
+            title="Create a group class"
+            description="Set up a recurring class with multiple students"
+            to="/classes/new"
+            actionLabel="Create"
+          />
+        </div>
+      )}
+
       {/* Empty states */}
-      {!loading && visibleSessions.length === 0 && (
+      {!loading && visibleSessions.length === 0 && !showGettingStarted && (
         <>
           {viewingToday && (
             <EmptyState

@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { PageHeader } from '@/components/ui/page-header'
+import { SkeletonCard } from '@/components/ui/skeleton-card'
 import type { GroupClass, Session } from '@/types'
 
 interface ClassCardProps {
@@ -111,8 +112,8 @@ export function ClassesPage() {
     return (
       <div className="py-6 space-y-4">
         <div className="h-8 w-32 rounded bg-secondary animate-pulse" />
-        <div className="h-24 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
-        <div className="h-24 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
+        <SkeletonCard />
+        <SkeletonCard />
       </div>
     )
   }
@@ -127,6 +128,11 @@ export function ClassesPage() {
           </Button>
         }
       />
+      {classes.length > 0 && (
+        <p className="text-sm text-muted-foreground -mt-2">
+          {classes.length} class{classes.length !== 1 ? 'es' : ''}
+        </p>
+      )}
 
       {/* Empty state */}
       {classes.length === 0 ? (

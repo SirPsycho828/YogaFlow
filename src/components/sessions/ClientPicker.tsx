@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
 import { ChevronDown, Search } from 'lucide-react'
 import { db } from '@/lib/firebase'
@@ -15,9 +16,10 @@ import type { Client } from '@/types'
 interface ClientPickerProps {
   value: string | null
   onChange: (clientId: string, clientName: string) => void
+  onLoaded?: (clients: Client[]) => void
 }
 
-export function ClientPicker({ value, onChange }: ClientPickerProps) {
+export function ClientPicker({ value, onChange, onLoaded }: ClientPickerProps) {
   const { user } = useAuth()
   const [open, setOpen] = useState(false)
   const [clients, setClients] = useState<Client[]>([])
@@ -35,9 +37,9 @@ export function ClientPicker({ value, onChange }: ClientPickerProps) {
     )
     getDocs(q)
       .then((snapshot) => {
-        setClients(
-          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Client)
-        )
+        const loaded = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Client)
+        setClients(loaded)
+        onLoaded?.(loaded)
       })
       .finally(() => setLoading(false))
   }, [user])
@@ -99,13 +101,13 @@ export function ClientPicker({ value, onChange }: ClientPickerProps) {
           ) : clients.length === 0 ? (
             <div className="px-3 py-4 text-sm text-center space-y-1">
               <p className="text-muted-foreground">No clients yet</p>
-              <a
-                href="/clients/new"
+              <Link
+                to="/clients/new"
                 className="text-primary text-sm hover:underline"
                 onClick={() => setOpen(false)}
               >
                 Add a client
-              </a>
+              </Link>
             </div>
           ) : filtered.length === 0 ? (
             <div className="px-3 py-4 text-sm text-muted-foreground text-center">

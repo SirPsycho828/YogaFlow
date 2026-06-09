@@ -13,7 +13,7 @@ import {
   getDocs,
 } from 'firebase/firestore'
 import { toast } from 'sonner'
-import { Search, UserPlus } from 'lucide-react'
+import { ArrowLeft, Search, UserPlus } from 'lucide-react'
 import { format } from 'date-fns'
 import { db } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
@@ -24,6 +24,8 @@ import { PaymentBadge } from '@/components/sessions/PaymentBadge'
 import { StatusBadge } from '@/components/sessions/StatusBadge'
 import { formatTime } from '@/lib/utils'
 import { NotificationPrompt } from '@/components/notifications/NotificationPrompt'
+import { NextStepCard } from '@/components/ux/NextStepCard'
+import { SkeletonCard } from '@/components/ui/skeleton-card'
 import type { Session, Attendance, Client, GroupClass } from '@/types'
 
 interface MarkSessionCompleteInput { sessionId: string }
@@ -186,11 +188,9 @@ export function GroupSessionPage() {
   if (loading) {
     return (
       <div className="py-6 space-y-4">
-        <div className="h-8 w-24 rounded bg-secondary animate-pulse" />
-        <div className="h-7 w-48 rounded bg-secondary animate-pulse" />
-        <div className="h-5 w-36 rounded bg-secondary animate-pulse" />
-        <div className="h-16 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
-        <div className="h-16 rounded-xl border border-border bg-card shadow-sm animate-pulse" />
+        <SkeletonCard lines={2} />
+        <SkeletonCard lines={3} />
+        <SkeletonCard lines={3} />
       </div>
     )
   }
@@ -232,6 +232,17 @@ export function GroupSessionPage() {
 
   return (
     <div className="py-6 space-y-5">
+      {/* Breadcrumb to parent class */}
+      {session.groupClassId && (
+        <Link
+          to={`/classes/${session.groupClassId}`}
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          {groupClass ? groupClass.name : 'Back to class'}
+        </Link>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <button
@@ -424,6 +435,16 @@ export function GroupSessionPage() {
 
       {/* Notification opt-in prompt shown after first completion */}
       {showNotificationPrompt && <NotificationPrompt />}
+
+      {/* Next step after completion */}
+      {session.status === 'completed' && (
+        <NextStepCard
+          icon={ArrowLeft}
+          title="Back to your day"
+          description="See your remaining sessions"
+          to="/today"
+        />
+      )}
     </div>
   )
 }

@@ -48,7 +48,7 @@ export function ResetPasswordPage() {
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full gradient-studio">
               <Mail className="h-5 w-5 text-primary-foreground" />
             </div>
-            <p className="mt-3 text-sm font-medium text-foreground">Check your inbox</p>
+            <p className="mt-3 text-sm font-medium text-foreground">Check your email for a reset link.</p>
             <p className="mt-1 text-xs text-muted-foreground">
               We sent a password reset link to {email}
             </p>

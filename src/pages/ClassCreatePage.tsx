@@ -22,6 +22,7 @@ import { Label } from '@/components/ui/label'
 import { DatePicker } from '@/components/sessions/DatePicker'
 import { TimePicker } from '@/components/sessions/TimePicker'
 import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
+import { Link } from 'react-router-dom'
 import type { Client } from '@/types'
 
 function addMinutes(time: string, minutes: number): string {
@@ -301,7 +302,10 @@ export function ClassCreatePage() {
               </div>
             ) : allClients.length === 0 ? (
               <div className="px-3 py-4 text-sm text-muted-foreground text-center">
-                No active clients
+                No active clients.{' '}
+                <Link to="/clients/new" className="text-primary underline-offset-4 hover:underline">
+                  Add a client first
+                </Link>
               </div>
             ) : filteredClients.length === 0 ? (
               <div className="px-3 py-4 text-sm text-muted-foreground text-center">

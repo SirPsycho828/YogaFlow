@@ -24,8 +24,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { CalendarPlus } from 'lucide-react'
 import { PaymentSummary } from '@/components/payments/PaymentSummary'
 import { PackageCreateSheet } from '@/components/payments/PackageCreateSheet'
+import { NextStepCard } from '@/components/ux/NextStepCard'
+import { GuidanceTip } from '@/components/ux/GuidanceTip'
 import type { Client } from '@/types'
 
 interface DeleteClientInput { clientId: string }
@@ -200,6 +203,15 @@ export function ClientDetailPage() {
         )}
       </section>
 
+      {/* Schedule CTA — nudge to book a session */}
+      <NextStepCard
+        icon={CalendarPlus}
+        title="Schedule a session"
+        description="Book this client's first session"
+        to={`/sessions/new?clientId=${client.id}`}
+        actionLabel="Book"
+      />
+
       {/* Health Notes section */}
       <section className="rounded-xl border border-border bg-card p-5 shadow-sm space-y-2">
         <div className="flex items-center justify-between">
@@ -230,6 +242,9 @@ export function ClientDetailPage() {
             Create Package
           </Button>
         </div>
+        <GuidanceTip id="packages-explained">
+          Packages let you sell session bundles. Credits are automatically deducted when you complete a session.
+        </GuidanceTip>
         <PaymentSummary
           clientId={client.id}
           unpaidCount={client.unpaidCount ?? 0}

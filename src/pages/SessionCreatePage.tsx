@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import {
   collection,
   addDoc,
@@ -47,6 +47,7 @@ export function SessionCreatePage() {
 
   const [clientId, setClientId] = useState<string | null>(initialClientId)
   const [clientName, setClientName] = useState<string>('')
+  const [noClients, setNoClients] = useState(false)
   const [date, setDate] = useState<Date | undefined>(initialDate)
   const [startTime, setStartTime] = useState<string>('')
   const [endTime, setEndTime] = useState<string>('')
@@ -122,7 +123,7 @@ export function SessionCreatePage() {
         const sessionDate = new Date(date!)
         sessionDate.setHours(0, 0, 0, 0)
 
-        await addDoc(collection(db, 'sessions'), {
+        const newSession = await addDoc(collection(db, 'sessions'), {
           instructorId: user.uid,
           type: 'private',
           clientId: clientId,
@@ -143,7 +144,7 @@ export function SessionCreatePage() {
         })
 
         toast.success('Session created')
-        navigate('/today')
+        navigate(`/sessions/${newSession.id}`)
       }
     } catch (err) {
       console.error('Failed to create session:', err)
@@ -159,10 +160,10 @@ export function SessionCreatePage() {
       <div className="flex items-center gap-3">
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/today')}
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          ← Back
+          ← Today
         </button>
       </div>
 
@@ -174,7 +175,20 @@ export function SessionCreatePage() {
           <Label className="text-xs font-medium tracking-wide text-muted-foreground">
             Client <span className="text-destructive">*</span>
           </Label>
-          <ClientPicker value={clientId} onChange={handleClientChange} />
+          <ClientPicker
+            value={clientId}
+            onChange={handleClientChange}
+            onLoaded={(clients) => setNoClients(clients.length === 0)}
+          />
+          {noClients && (
+            <p className="text-sm text-muted-foreground">
+              No clients yet.{' '}
+              <Link to="/clients/new" className="text-primary hover:underline">
+                Add a client
+              </Link>{' '}
+              before scheduling a session.
+            </p>
+          )}
         </div>
 
         {/* Date */}

@@ -60,12 +60,11 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
   const [run, setRun] = useState(false)
   const [stepIndex, setStepIndex] = useState(0)
 
-  // Auto-start: check for pending flag on mount
+  // Auto-start: trigger for any user who has never completed the tour
   useEffect(() => {
-    const pending = localStorage.getItem(TOUR_PENDING_KEY)
     const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
 
-    if (pending === 'true' && completed !== 'true') {
+    if (completed !== 'true') {
       const timer = setTimeout(() => {
         localStorage.removeItem(TOUR_PENDING_KEY)
         setStepIndex(0)

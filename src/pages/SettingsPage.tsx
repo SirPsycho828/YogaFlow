@@ -6,10 +6,12 @@ import { isNotificationSupported, requestNotificationPermission } from '@/lib/me
 import { Switch } from '@/components/ui/switch'
 import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
 import { PageHeader } from '@/components/ui/page-header'
-import { User, Bell, Smartphone, LogOut, Mail, ChevronRight } from 'lucide-react'
+import { User, Bell, Smartphone, LogOut, Mail, ChevronRight, RotateCcw } from 'lucide-react'
+import { useTour } from '@/components/tour/TourProvider'
 
 export function SettingsPage() {
   const { user, instructor, signOut } = useAuth()
+  const { startTour } = useTour()
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     instructor?.notificationsEnabled ?? false
   )
@@ -109,6 +111,17 @@ export function SettingsPage() {
           App
         </h2>
         <div className="rounded-xl border border-border bg-card shadow-sm divide-y divide-border">
+          {/* Replay Tour */}
+          <button
+            onClick={startTour}
+            className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-muted/50 transition-colors"
+          >
+            <RotateCcw className="h-5 w-5 text-muted-foreground" />
+            <div className="flex-1 min-w-0">
+              <span className="text-sm font-medium text-foreground">Replay App Tour</span>
+              <p className="text-xs text-muted-foreground mt-0.5">Walk through the app features again</p>
+            </div>
+          </button>
           {/* Version */}
           <div className="flex items-center gap-3 px-4 py-3.5">
             <Smartphone className="h-5 w-5 text-muted-foreground" />

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
 import { ChevronDown, Search } from 'lucide-react'
 import { db } from '@/lib/firebase'
@@ -100,13 +101,13 @@ export function ClientPicker({ value, onChange, onLoaded }: ClientPickerProps) {
           ) : clients.length === 0 ? (
             <div className="px-3 py-4 text-sm text-center space-y-1">
               <p className="text-muted-foreground">No clients yet</p>
-              <a
-                href="/clients/new"
+              <Link
+                to="/clients/new"
                 className="text-primary text-sm hover:underline"
                 onClick={() => setOpen(false)}
               >
                 Add a client
-              </a>
+              </Link>
             </div>
           ) : filtered.length === 0 ? (
             <div className="px-3 py-4 text-sm text-muted-foreground text-center">

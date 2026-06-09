@@ -33,9 +33,9 @@ export function GreetingHero({ displayName, sessionCount, totalMinutes, complete
           </div>
         )}
         {completedCount != null && completedCount > 0 && sessionCount > 0 && (
-          <div className="flex items-center gap-1.5 rounded-full bg-[hsl(var(--success))]/10 px-3 py-1.5">
-            <CheckCircle2 className="h-4 w-4 text-[hsl(var(--success))]" />
-            <span className="text-sm font-medium text-[hsl(var(--success))]">
+          <div className="flex items-center gap-1.5 rounded-full bg-[hsl(var(--status-completed))]/10 px-3 py-1.5">
+            <CheckCircle2 className="h-4 w-4 text-[hsl(var(--status-completed))]" />
+            <span className="text-sm font-medium text-[hsl(var(--status-completed))]">
               {completedCount} done{remainingCount > 0 ? `, ${remainingCount} left` : ''}
             </span>
           </div>

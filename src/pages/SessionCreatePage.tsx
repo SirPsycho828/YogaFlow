@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import {
   collection,
   addDoc,
@@ -183,9 +183,9 @@ export function SessionCreatePage() {
           {noClients && (
             <p className="text-sm text-muted-foreground">
               No clients yet.{' '}
-              <a href="/clients/new" className="text-primary hover:underline">
+              <Link to="/clients/new" className="text-primary hover:underline">
                 Add a client
-              </a>{' '}
+              </Link>{' '}
               before scheduling a session.
             </p>
           )}

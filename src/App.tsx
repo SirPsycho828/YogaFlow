@@ -10,6 +10,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { SignUpPage } from '@/pages/SignUpPage'
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { OnboardingPage } from '@/pages/OnboardingPage'
+import { SetupWizardPage } from '@/pages/SetupWizardPage'
 import { TodayPage } from '@/pages/TodayPage'
 import { CalendarPage } from '@/pages/CalendarPage'
 import { ClientsPage } from '@/pages/ClientsPage'
@@ -53,6 +54,14 @@ export default function App() {
             element={
               <AuthOnlyRoute>
                 <OnboardingPage />
+              </AuthOnlyRoute>
+            }
+          />
+          <Route
+            path="/setup"
+            element={
+              <AuthOnlyRoute>
+                <SetupWizardPage />
               </AuthOnlyRoute>
             }
           />

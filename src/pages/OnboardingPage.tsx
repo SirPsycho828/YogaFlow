@@ -5,7 +5,6 @@ import { toast } from 'sonner'
 import { Sparkles } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { db } from '@/lib/firebase'
-import { scheduleTour } from '@/components/tour/TourProvider'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -44,11 +43,11 @@ export function OnboardingPage() {
         experienceLevel,
         classTypes,
         onboardingComplete: true,
+        setupWizardComplete: false,
         updatedAt: serverTimestamp(),
       })
       await refreshInstructor()
-      scheduleTour()
-      navigate('/today', { replace: true })
+      navigate('/setup', { replace: true })
     } catch (err) {
       console.error('Failed to complete onboarding:', err)
       toast.error('Something went wrong. Please try again.')

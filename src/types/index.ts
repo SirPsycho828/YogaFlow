@@ -5,6 +5,7 @@ export interface Instructor {
   email: string
   displayName: string
   onboardingComplete: boolean
+  setupWizardComplete?: boolean
   fcmToken?: string
   notificationsEnabled?: boolean
   experienceLevel?: 'beginner' | 'intermediate' | 'experienced'

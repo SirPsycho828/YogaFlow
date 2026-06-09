@@ -19,6 +19,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (loading) return <LoadingScreen />
   if (!user) return <Navigate to="/" replace />
   if (instructor && !instructor.onboardingComplete) return <Navigate to="/onboarding" replace />
+  if (instructor && instructor.setupWizardComplete === false) return <Navigate to="/setup" replace />
 
   return <>{children}</>
 }

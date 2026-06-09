@@ -19,12 +19,13 @@ import {
   Timestamp,
 } from 'firebase/firestore'
 import { toast } from 'sonner'
-import { MapPin, Plus, X, Search } from 'lucide-react'
+import { MapPin, Plus, X, Search, CalendarPlus } from 'lucide-react'
 import { db } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
 import { SessionCard } from '@/components/sessions/SessionCard'
+import { NextStepCard } from '@/components/ux/NextStepCard'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -442,7 +443,16 @@ export function ClassDetailPage() {
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-foreground font-heading">Upcoming Sessions</h2>
         {upcomingSessions.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No upcoming sessions.</p>
+          <>
+            <p className="text-sm text-muted-foreground">No upcoming sessions.</p>
+            <NextStepCard
+              icon={CalendarPlus}
+              title="Schedule a session"
+              description="Add a session for this class so students know when to show up."
+              to="/sessions/new"
+              actionLabel="Schedule"
+            />
+          </>
         ) : (
           <div className="space-y-2">
             {upcomingSessions.map((session) => (

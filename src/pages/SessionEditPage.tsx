@@ -246,10 +246,10 @@ export function SessionEditPage() {
       <div className="py-6 space-y-4">
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/today')}
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          ← Back
+          ← Today
         </button>
         <p className="text-muted-foreground">Session not found.</p>
       </div>
@@ -266,7 +266,7 @@ export function SessionEditPage() {
             onClick={() => navigate(`/sessions/${original.id}`)}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Back
+            ← Session
           </button>
         </div>
 

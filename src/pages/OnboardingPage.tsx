@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore'
+import { toast } from 'sonner'
 import { Sparkles } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { db } from '@/lib/firebase'
@@ -48,6 +49,7 @@ export function OnboardingPage() {
       navigate('/today', { replace: true })
     } catch (err) {
       console.error('Failed to complete onboarding:', err)
+      toast.error('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }

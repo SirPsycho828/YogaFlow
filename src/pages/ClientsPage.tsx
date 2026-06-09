@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { ClientRow } from '@/components/clients/ClientRow'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { PageHeader } from '@/components/ui/page-header'
+import { SkeletonCard } from '@/components/ui/skeleton-card'
 import type { Client } from '@/types'
 
 export function ClientsPage() {
@@ -62,6 +63,11 @@ export function ClientsPage() {
           </Button>
         }
       />
+      {!loading && (
+        <p className="text-sm text-muted-foreground -mt-2">
+          {clients.length} client{clients.length !== 1 ? 's' : ''}
+        </p>
+      )}
 
       {/* Search */}
       <div className="relative">
@@ -79,10 +85,7 @@ export function ClientsPage() {
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-[68px] rounded-xl border border-border bg-card shadow-sm animate-pulse"
-            />
+            <SkeletonCard key={i} />
           ))}
         </div>
       ) : filtered.length === 0 ? (

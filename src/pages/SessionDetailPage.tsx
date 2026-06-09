@@ -4,7 +4,7 @@ import { PageHeader } from '@/components/ui/page-header'
 import { doc, onSnapshot, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { httpsCallable } from 'firebase/functions'
 import { toast } from 'sonner'
-import { MapPin, Repeat } from 'lucide-react'
+import { MapPin, Repeat, ArrowLeft, Calendar, Users } from 'lucide-react'
 import { format } from 'date-fns'
 import { db, functions } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
@@ -25,8 +25,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { formatTime } from '@/lib/utils'
+import { formatTime, getSessionDuration } from '@/lib/utils'
 import { NotificationPrompt } from '@/components/notifications/NotificationPrompt'
+import { NextStepCard } from '@/components/ux/NextStepCard'
 import type { Session, Client, Package } from '@/types'
 
 interface MarkSessionCompleteInput { sessionId: string }
@@ -226,7 +227,12 @@ export function SessionDetailPage() {
           </span>
         )}
         <p className="text-sm font-medium text-foreground">{fullDate}</p>
-        <p className="text-sm text-muted-foreground">{timeRange}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-muted-foreground">{timeRange}</p>
+          <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
+            {getSessionDuration(session.startTime, session.endTime)} min
+          </span>
+        </div>
       </div>
 
       {/* Location */}
@@ -340,6 +346,39 @@ export function SessionDetailPage() {
           </p>
         )}
       </div>
+
+      {/* UX-004: Next step after completing a session */}
+      {session.status === 'completed' && (
+        <NextStepCard
+          icon={ArrowLeft}
+          title="Back to your day"
+          description="See your remaining sessions"
+          to="/today"
+          actionLabel="Go"
+        />
+      )}
+
+      {/* UX-018: Reschedule option for cancelled private sessions */}
+      {session.status === 'cancelled' && session.type === 'private' && session.clientId && (
+        <NextStepCard
+          icon={Calendar}
+          title="Reschedule"
+          description="Book a new session with this client"
+          to={`/sessions/new?clientId=${session.clientId}`}
+          actionLabel="Book"
+        />
+      )}
+
+      {/* UX-019: Attendance link for group sessions */}
+      {session.type === 'group' && (
+        <NextStepCard
+          icon={Users}
+          title="Take Attendance"
+          description="Mark who attended this class"
+          to={`/sessions/${session.id}/attendance`}
+          actionLabel="Open"
+        />
+      )}
 
       {/* Notes sheet */}
       {session.status === 'completed' && (

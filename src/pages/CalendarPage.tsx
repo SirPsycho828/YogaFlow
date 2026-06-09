@@ -27,6 +27,7 @@ import { db } from '@/lib/firebase'
 import { useAuth } from '@/hooks/useAuth'
 import { SessionCard } from '@/components/sessions/SessionCard'
 import { FAB } from '@/components/today/FAB'
+import { GuidanceTip } from '@/components/ux/GuidanceTip'
 import { cn } from '@/lib/utils'
 import type { Session } from '@/types'
 
@@ -278,6 +279,7 @@ function DayDetail({ day, sessions, loading }: DayDetailProps) {
         <div className="flex flex-col items-center justify-center py-10 text-center">
           <CalendarX className="h-8 w-8 text-muted-foreground" />
           <p className="mt-2 text-sm text-muted-foreground">No sessions</p>
+          <p className="mt-1 text-xs text-muted-foreground/70">Tap + to add a session</p>
         </div>
       )}
 
@@ -491,6 +493,11 @@ export function CalendarPage() {
           onSelectSession={handleSelectSession}
         />
       )}
+
+      {/* ── Dot color legend ── */}
+      <GuidanceTip id="calendar-dot-colors">
+        Green dots are private sessions · Blue dots are group classes
+      </GuidanceTip>
 
       {/* ── Day detail panel ── */}
       <DayDetail
